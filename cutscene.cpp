@@ -34,7 +34,7 @@ void Portrait::render() {
 
 void Cutscene::drawDialogueText(std::string s) {
   //drawTicks++;
-  gText.loadFromRenderedText(charName, White, wrpBnd, *gTextFont);
+  gText.loadFromRenderedText(charName[lineNumber], White, wrpBnd, *gTextFont);
   gText.render(textX-75, textY);
   if(!doNotType) {
     if(!pause) {
@@ -47,7 +47,7 @@ void Cutscene::drawDialogueText(std::string s) {
       }
     }
     gText.loadFromRenderedText(textWritten, White, wrpBnd, *gTextFont);
-    gText.render(textX, textY);
+    gText.render(textX+25, textY);
 	
   } else {
     if(!pause) {
@@ -60,14 +60,73 @@ void Cutscene::drawDialogueText(std::string s) {
       }
     }
     gText.loadFromRenderedText(textWritten, White, wrpBnd, *gTextFont);
-    gText.render(textX, textY);
+    gText.render(textX+25, textY);
   }
 }
 
+void Cutscene::handleEvent(SDL_Event& e, bool controller) {
+  bool upKey, downKey, leftKey, rightKey, zKey, xKey, cKey, lShiftKey, escKey, lCtrlKey;
+  bool mouseLeft;
+  int mouseX, mouseY;
+  mouseLeft = SDL_GetMouseState(&mouseX, &mouseY) == 1;
+    if(!controller) {
+      upKey = currentKeyStates[SDL_SCANCODE_UP];
+      downKey = currentKeyStates[SDL_SCANCODE_DOWN];
+      leftKey = currentKeyStates[SDL_SCANCODE_LEFT];
+      rightKey = currentKeyStates[SDL_SCANCODE_RIGHT];
+      zKey = currentKeyStates[SDL_SCANCODE_Z] || currentKeyStates[SDL_SCANCODE_J] || currentKeyStates[SDL_SCANCODE_RETURN] || currentKeyStates[SDL_SCANCODE_KP_ENTER];
+      xKey = currentKeyStates[SDL_SCANCODE_X];
+      cKey = currentKeyStates[SDL_SCANCODE_C];
+      lShiftKey = currentKeyStates[SDL_SCANCODE_LSHIFT];
+      escKey = currentKeyStates[SDL_SCANCODE_ESCAPE];
+      lCtrlKey = currentKeyStates[SDL_SCANCODE_LCTRL];
+    } else {
+      upKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) || currentKeyStates[SDL_SCANCODE_UP];
+      downKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || currentKeyStates[SDL_SCANCODE_DOWN];
+      leftKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_LEFT) || currentKeyStates[SDL_SCANCODE_LEFT];
+      rightKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || currentKeyStates[SDL_SCANCODE_RIGHT];
+      zKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) || currentKeyStates[SDL_SCANCODE_Z]  || currentKeyStates[SDL_SCANCODE_J] || currentKeyStates[SDL_SCANCODE_RETURN] || currentKeyStates[SDL_SCANCODE_KP_ENTER];
+      xKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y) || currentKeyStates[SDL_SCANCODE_X];
+      lCtrlKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) || currentKeyStates[SDL_SCANCODE_LCTRL];
+      lShiftKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) || currentKeyStates[SDL_SCANCODE_LSHIFT];
+      escKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) || currentKeyStates[SDL_SCANCODE_ESCAPE];
+    }
+    if(canAdvance) {
+      if(zKey || mouseLeft) {
+	if(!advancedDialogue) {
+	  if(charCount < scriptLine[lineNumber].size()) {
+	    doNotType = 1;
+	  } else {
+	    doNotType = 0;
+	    charCount = 0;
+	    gText.free();
+	    textWritten = "";
+	    lineNumber++;
+	  }
+	}
+	advancedDialogue = true;
+      } else {
+	advancedDialogue = false;
+      }
+    }
+    if(lCtrlKey) {
+      if(!hasTobasu)
+	tobasu = true;
+      hasTobasu = true;
+    } else {
+      tobasu = false;
+      if(hasTobasu) {
+	//something
+      }
+      hasTobasu = false;
+    }
+}
+
 void Cutscene::play() {
+  canAdvance = true;
   switch(bgID) {
   case street1:
-    gStreet1BG.render(0,0);
+    gAtticBG.render(0,0);
     break;
   }
   if(menu.blurAlpha == 0) {

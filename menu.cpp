@@ -25,25 +25,8 @@ void Menu::blur1() {
 void Menu::renderMenu() {
   switch(menuScreenID) {
   case scrMainMenu:
-    gCoastBG.render(camera.x,camera.y);
+    gAtticBG.render(camera.x,camera.y);
     gMenuBG.render(camera.x,camera.y);
-
-    switch(playerChar) {
-    case playerLS:
-      names[0] = "Louis";
-      break;
-    case playerHG:
-      names[0] = "Hildegarde";
-      break;
-    }
-     switch(friendChar) {
-    case friendLS:
-      names[1] = "Louis";
-      break;
-    case friendHG:
-      names[1] = "Hildegarde";
-      break;
-    }
     
     gText.loadFromRenderedText(names[0], Black, 0, gFancyFont);
     gText.render(90, 450);
@@ -64,16 +47,13 @@ void Menu::handleEvent(SDL_Event& e) {
   mouseLeft = SDL_GetMouseState(&mouseX, &mouseY) == 1;
   switch(menuScreenID) {
   case scrMainMenu:
-    numBoxes = 4;
+    numBoxes = 2;
     mouseBox = {mouseX,mouseY,5,5};
     //start
     boxes[0] = {325, 420, 160, 65};
     //load
     boxes[1] = {535, 420, 170, 70};
-    //name1
-    boxes[2] = {90, 445, 190, 45};
-    //name2
-    boxes[3] = {90, 505, 190, 45};
+
 
     for(int i = 0; i < numBoxes; i++) {
       if(checkCollision(mouseBox,boxes[i])) {
@@ -86,22 +66,8 @@ void Menu::handleEvent(SDL_Event& e) {
     if(mouseLeft) {
       if(!pressedKey[pressedKeys{mleft}]) {
 	pressedKey[pressedKeys{mleft}] = true;
-      
-	if(checkCollision(mouseBox,boxes[2])) {
-	  switch(playerChar) {
-	  case playerLS: playerChar = playerHG;
-	    break;
-	  case playerHG: playerChar = playerLS;
-	    break;
-	  }
-	} else if(checkCollision(mouseBox,boxes[3])) {
-	  switch(friendChar) {
-	  case friendLS: friendChar = friendHG;
-	    break;
-	  case friendHG: friendChar = friendLS;
-	    break;
-	  }
-	} else if(checkCollision(mouseBox,boxes[0])) {
+
+	if(checkCollision(mouseBox,boxes[0])) {
 	  blurSuccess[0] = false;
 	  blurSuccess[1] = false;
 	  doBlur = true;

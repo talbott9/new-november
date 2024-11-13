@@ -37,6 +37,8 @@ int main(int argv, char** args) {
 	quit = true;
     }
 
+    cutscene.handleEvent(e, false);
+
     if(menu.doBlur) {
       menu.blur1();
     } else {

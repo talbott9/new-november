@@ -38,13 +38,13 @@ class Cutscene {
   bool createdPortrait[NUM_PORTRAITS];
   Portrait* charPortrait[NUM_PORTRAITS];
   portraitFace charFace[NUM_PORTRAITS][NUM_SCRIPT_LINES];
-  std::string charName;
+  std::string charName[NUM_SCRIPT_LINES];
   
  private:
   std::string s;
   char c;
   int i, charCount, lineNumber, totalNumberOfLines, wrpBnd, textX, textY;
-  bool doNotType, hasIndexedScript, hasDeterminedScenes;
+  bool doNotType, hasIndexedScript, hasDeterminedScenes, advancedDialogue, tobasu, hasTobasu, canAdvance;
 };
 
 Cutscene cutscene;

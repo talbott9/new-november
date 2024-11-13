@@ -11,9 +11,10 @@ SDL_Window* gWindow = NULL;
 SDL_GameController* gGameController = NULL;
 SDL_Joystick* gJoystick = NULL;
 const int JOYSTICK_DEAD_ZONE = 8000;
-int SCREEN_WIDTH = 800;
-int SCREEN_HEIGHT = 600;
+int SCREEN_WIDTH = 1280;
+int SCREEN_HEIGHT = 720;
 SDL_Renderer* gRenderer = NULL;
+const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 
 bool init()
 {

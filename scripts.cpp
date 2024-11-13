@@ -12,11 +12,14 @@ void Cutscene::indexScript() {
 	charPortrait[1]->gTexture = &gHGPortrait;
 	switch(sceneID) {
 	case scene1:
-	  charName = "Louis: ";
-	  scriptLine[0] = "It's been a while since I've been";
-	  charFace[0][0] = neutralFace;
 	  bgID = street1;
-	  totalNumberOfLines = 1;
+	  charName[0] = "Nathan  ";
+	  scriptLine[0] = "\"It's been a while since I've been here.\"";
+	  charFace[0][0] = neutralFace;
+	  charName[1] = "Hilda   ";
+	  scriptLine[1] = "Cool story, bro.";
+	  charFace[0][1] = neutralFace;
+	  totalNumberOfLines = 3;
 	  hasIndexedScript = true;
 	  break;
 	}
