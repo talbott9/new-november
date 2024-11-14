@@ -1,9 +1,10 @@
-enum menuStep {scrMainMenu, scrNone};
+enum menuStep {scrMainMenu, scrNone, scrAttic};
 menuStep menuScreenID = scrMainMenu;
 
 class Menu { 
 public:
   SDL_Rect boxes[20];
+  std::string strs[20];
   int mouseX, mouseY;
   std::string names[2];
   void renderMenu();

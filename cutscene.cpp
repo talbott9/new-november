@@ -126,9 +126,10 @@ void Cutscene::play() {
   canAdvance = true;
   switch(bgID) {
   case street1:
-    gAtticBG.render(0,0);
     break;
   }
+  if(menuScreenID == scrAttic)
+    canAdvance = false;
   if(menu.blurAlpha == 0) {
     if(createdPortrait[0]) 
       charPortrait[0]->render();

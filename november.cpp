@@ -4,6 +4,8 @@
 #include "renderer.h"
 #include "renderer.cpp"
 #include "media.cpp"
+#include "player.h"
+#include "player.cpp"
 #include "menu.h"
 #include "menu.cpp"
 #include "cutscene.h"
@@ -28,7 +30,7 @@ int main(int argv, char** args) {
     menu.renderMenu();
     menu.handleEvent(e);
 
-    if(menuScreenID == scrNone)
+    if(menuScreenID == scrAttic)
       cutscene.play();
 
     while( SDL_PollEvent( &e ) != 0 ) {

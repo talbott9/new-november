@@ -14,7 +14,7 @@ enum friendChars {friendLS, friendHG};
 friendChars friendChar = friendHG;
 enum bgIDEnum {street1, street2};
 bgIDEnum bgID = street1;
-enum sceneIDEnum {scene1};
-sceneIDEnum sceneID = scene1;
+enum sceneIDEnum {scene1, attic1};
+sceneIDEnum sceneID = attic1;
 
 bool pause = false;

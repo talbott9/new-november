@@ -1,6 +1,7 @@
 TTF_Font* gFont = NULL;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
+TTF_Font* gMonoFont = NULL;
 LTexture gTextbox, gAtticBG, gMenuBG, gStreet1BG;
 LTexture gLSPortrait, gHGPortrait;
 
@@ -18,6 +19,7 @@ bool loadMedia() {
 
 void loadFont(int size) {
 	gFont= TTF_OpenFont("resources/fonts/font1.ttf", size);
+	gMonoFont= TTF_OpenFont("resources/fonts/monofont.ttf", size);
 	gFancyFont = TTF_OpenFont("resources/fonts/Basic Roman-BoldItalic.ttf", 40);
 	gBigFancyFont = TTF_OpenFont("resources/fonts/Basic Roman-BoldItalic.ttf", 70);
 }

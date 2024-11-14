@@ -124,7 +124,7 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
     SDL_Surface* textSurface = TTF_RenderText_Blended_Wrapped( gFont, textureText.c_str(), textColor, wrapBoundary );
     if( textSurface == NULL )
     {
-        printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
+      //printf( "Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError() );
     }
     else
     {
