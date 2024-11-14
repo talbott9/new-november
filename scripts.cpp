@@ -17,6 +17,11 @@ void Cutscene::indexScript() {
       scriptLine[0] = "What will you do?";
       totalNumberOfLines = 1;
       break;
+    case attic2:
+      charName[0] = "";
+      scriptLine[0] = "What will be your schedule today?";
+      totalNumberOfLines = 1;
+      break;
     }
   }
 }

@@ -6,9 +6,9 @@
 #include "media.cpp"
 #include "player.h"
 #include "player.cpp"
+#include "cutscene.h"
 #include "menu.h"
 #include "menu.cpp"
-#include "cutscene.h"
 #include "scripts.cpp"
 #include "cutscene.cpp"
 

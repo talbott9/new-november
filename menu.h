@@ -3,8 +3,8 @@ menuStep menuScreenID = scrMainMenu;
 
 class Menu { 
 public:
-  SDL_Rect boxes[20];
-  std::string strs[20];
+  SDL_Rect boxes[50];
+  std::string strs[50];
   int mouseX, mouseY;
   std::string names[2];
   void renderMenu();
@@ -20,5 +20,7 @@ public:
   int blurAlpha;
   SDL_Rect blurBoxes[10];
   int blurSpeed = 4;
+  bool showSchedule[2];
+  int chosenSchedule;
 };
 

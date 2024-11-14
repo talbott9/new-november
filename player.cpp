@@ -7,4 +7,7 @@ Player::Player() {
   breed = 5;
   character = 10;
   money = 10;
+  clothesID = ragsID;
+  for(int i = 0; i < 3; i++)
+    scheduleID[i] = schNothing;
 }

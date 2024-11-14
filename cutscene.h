@@ -23,7 +23,7 @@ class Cutscene {
   void skipText();
   void play();
   void blur();
-  void resetCutscene();
+  void reset();
   void gameOverScreen();
 
   SDL_Rect textbox;

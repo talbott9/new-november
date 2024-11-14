@@ -32,6 +32,14 @@ void Portrait::render() {
   gTexture->render(posX, posY);
 }
 
+void Cutscene::reset() {
+  doNotType = 0;
+  charCount = 0;
+  gText.free();
+  textWritten = "";
+  hasIndexedScript = false;
+}
+
 void Cutscene::drawDialogueText(std::string s) {
   //drawTicks++;
   gText.loadFromRenderedText(charName[lineNumber], White, wrpBnd, *gTextFont);
