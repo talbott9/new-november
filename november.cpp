@@ -30,7 +30,7 @@ int main(int argv, char** args) {
     menu.renderMenu();
     menu.handleEvent(e);
 
-    if(menuScreenID == scrAttic)
+    if(menuScreenID == scrAttic || menuScreenID == scrNone)
       cutscene.play();
 
     while( SDL_PollEvent( &e ) != 0 ) {

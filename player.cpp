@@ -10,4 +10,6 @@ Player::Player() {
   clothesID = ragsID;
   for(int i = 0; i < 3; i++)
     scheduleID[i] = schNothing;
+  heldItems[itemOldSword] = true;
+  heldItems[itemRags] = true;
 }

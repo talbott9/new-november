@@ -13,7 +13,7 @@ public:
   SDL_Rect mouseBox;
   int numBoxes;
   bool pressedKey[10];
-  enum pressedKeys {mleft};
+  enum pressedKeys {mleft, mright};
   bool blurSuccess[2];
   bool doBlur, undoBlur;
   void blur1();
@@ -22,5 +22,8 @@ public:
   int blurSpeed = 4;
   bool showSchedule[2];
   int chosenSchedule;
+  bool showItems[2];
+  bool listedItem[100];
+  std::string itemStrings[50];
 };
 

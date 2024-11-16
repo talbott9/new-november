@@ -26,11 +26,11 @@ void Menu::renderMenu() {
   switch(menuScreenID) {
   case scrMainMenu:
     gAtticBG.render(camera.x,camera.y);
-    gMenuBG.render(camera.x,camera.y);
+    //gMenuBG.render(camera.x,camera.y);
 
-    gText.loadFromRenderedText("Start", Black, 0, gBigFancyFont);
+    gText.loadFromRenderedText("Start", Blue1, 0, gBigFancyFont);
     gText.render(330, 425);
-    gText.loadFromRenderedText("Load", Black, 0, gBigFancyFont);
+    gText.loadFromRenderedText("Load", Blue1, 0, gBigFancyFont);
     gText.render(540, 425);
      
     break;
@@ -137,12 +137,12 @@ void Menu::renderMenu() {
 	  strs[34] = "Romance";
 	  renderX = 220;
 	} else if(j == 2) {
-	  strs[35] = "Nothing";
+	  strs[35] = "Rest";
 	  strs[36] = "Walk";
 	  strs[37] = "Fencing";
 	  strs[38] = "";
 	  strs[39] = "";
-	  strs[40] = "Visit";
+	  strs[40] = "Go out";
 	  renderX = 220*2;
 	}
 	 boxes[10+6*j] = {camera.x + camera.w/4 + renderX, camera.y + camera.h/8*2.25, 140, 50};
@@ -195,7 +195,7 @@ void Menu::renderMenu() {
 	  strs[23+i] = "Fencing";
 	  break;
 	case schVisit:
-	  strs[23+i] = "Visit";
+	  strs[23+i] = "Go out";
 	  break;
 	}
       }
@@ -217,14 +217,51 @@ void Menu::renderMenu() {
 	gText.render(boxes[i].x, boxes[i].y);
       }
     }
+
+        
+    //items
+    if(showItems[0]) {
+      SDL_Rect genRect = {camera.x + camera.w/4, camera.y + camera.h/8,500,400};
+      SDL_SetRenderDrawColor(gRenderer, 0, 30, 105, 255);
+      SDL_RenderFillRect(gRenderer, &genRect);
+      boxes[6] = {camera.x + camera.w/4*1.15, camera.y + camera.h/8*1.35, 175, 50};
+      for(int i = 7; i < 13; i++) {
+	boxes[i] = {boxes[6].x, boxes[6].y + (i-7)*55, boxes[6].w, boxes[6].h};
+	//SDL_SetRenderDrawColor(gRenderer, 0, 60, 105, 255);
+	//SDL_RenderFillRect(gRenderer, &boxes[i]);
+	//	gText.loadFromRenderedText(strs[i], White, 0, gFont);
+	//gText.render(boxes[i].x, boxes[i].y);
+      }
+      boxes[13] = {camera.x + camera.w/4*1.15 + 175*1.30, camera.y + camera.h/8*1.35, 175, 50};
+      for(int i = 13; i < 19; i++) {
+	boxes[i] = {boxes[13].x, boxes[13].y + (i-13)*55, boxes[13].w, boxes[13].h};
+	//SDL_SetRenderDrawColor(gRenderer, 0, 60, 105, 255);
+	//SDL_RenderFillRect(gRenderer, &boxes[i]);
+	//	gText.loadFromRenderedText(strs[i], White, 0, gFont);
+	//gText.render(boxes[i].x, boxes[i].y);
+      }
+      for(int i = 7; i < 19; i++) {
+	if(player.heldItems[itemOldSword] && !listedItem[itemOldSword]) {
+	  itemStrings[i] = "Old sword";
+	  listedItem[itemOldSword] = true;
+	}
+	else if(player.heldItems[itemRags] && !listedItem[itemRags]) {
+	  itemStrings[i] = "Rags";
+	  listedItem[itemRags] = true;
+	}
+	gText.loadFromRenderedText(itemStrings[i], White, 0, gFont);
+	gText.render(boxes[i].x, boxes[i].y);
+      }
+    }
     
     break;
   }
 }
 
 void Menu::handleEvent(SDL_Event& e) {
-  bool mouseLeft;
+  bool mouseLeft, mouseRight;
   mouseLeft = SDL_GetMouseState(&mouseX, &mouseY) == 1;
+  mouseRight = SDL_GetMouseState(&mouseX, &mouseY) == 4;
   switch(menuScreenID) {
   case scrMainMenu:
     numBoxes = 2;
@@ -259,7 +296,7 @@ void Menu::handleEvent(SDL_Event& e) {
 
     if(blurSuccess[0]) {
       doBlur = true;
-      menuScreenID = scrAttic;
+      menuScreenID = scrNone;
     }
 
     break;
@@ -292,12 +329,56 @@ void Menu::handleEvent(SDL_Event& e) {
 	  SDL_RenderFillRect(gRenderer, &boxes[i]);
 	}
       }
+    } else if(showItems[0]) {
+      bool touched = false;
+      for(int i = 7; i < 19; i++) {
+	if(checkCollision(mouseBox,boxes[i])) {
+	  touched = true;
+	  if(itemStrings[i] == "Old sword") {
+	    if(sceneID != atticoldsword) {
+	      cutscene.reset();
+	      sceneID = atticoldsword;
+	    }
+	  } else if(itemStrings[i] == "Rags") {
+	    if(sceneID != atticrags) {
+	      cutscene.reset();
+	      sceneID = atticrags;
+	    }
+	  }
+	}
+      }
+    
+      if(!touched && sceneID != attic1) {
+	cutscene.reset();
+	sceneID = attic1;
+      }
     }
 
+    if(mouseRight) {
+      if(!pressedKey[pressedKeys{mright}]) {
+	pressedKey[pressedKeys{mright}] = true;
+	if(showSchedule[1]) {
+	  showSchedule[1] = false;
+	}
+	else if(showSchedule[0]) {
+	  showSchedule[0] = false;
+	  showSchedule[1] = false;
+	  cutscene.reset();
+	  sceneID = attic1;
+	}
+	if(showItems[0]) {
+	  showItems[0] = false;
+	}
+      }
+    } else {
+      pressedKey[pressedKeys{mright}] = false;
+    }
+    
     if(mouseLeft) {
       if(!pressedKey[pressedKeys{mleft}]) {
 	pressedKey[pressedKeys{mleft}] = true;
 	if(checkCollision(mouseBox,boxes[0])) {
+	  showItems[0] = false;
 	  if(showSchedule[0]) {
 	    sceneID = attic1;
 	    cutscene.reset();
@@ -309,6 +390,20 @@ void Menu::handleEvent(SDL_Event& e) {
 	    showSchedule[0] = true;
 	  }
 	}
+
+	else if(checkCollision(mouseBox,boxes[1])) {
+	  if(showItems[0]) {
+	    showItems[0] = false;
+	  } else {
+	    showItems[0] = true;
+	    for(int i = 0; i < 50; i++) {
+	      listedItem[i] = false;
+	    }
+	    showSchedule[0] = false;
+	    showSchedule[1] = false;
+	  }
+	}
+	
 	if(showSchedule[1]) {
 	  bool clicked = false;
 	  std::string message = "";
@@ -343,7 +438,7 @@ void Menu::handleEvent(SDL_Event& e) {
 	  }  else if(checkCollision(mouseBox,boxes[21])) {
 	    clicked = true;
 	    player.scheduleID[chosenSchedule] = schRomance;
-	    message = "read a romantic novel";
+	    message = "read a romance";
 	  }  else if(checkCollision(mouseBox,boxes[22])) {
 	    clicked = true;
 	    player.scheduleID[chosenSchedule] = schNothing;
@@ -359,7 +454,7 @@ void Menu::handleEvent(SDL_Event& e) {
 	  } else if(checkCollision(mouseBox,boxes[27])) {
 	    clicked = true;
 	    player.scheduleID[chosenSchedule] = schVisit;
-	    message = "visit someone";
+	    message = "go out";
 	  }
 	  
 	  if(clicked) {
@@ -370,7 +465,7 @@ void Menu::handleEvent(SDL_Event& e) {
 	      whatTime = "afternoon";
 	    else if(chosenSchedule == 2)
 	      whatTime = "evening";
-	    cutscene.scriptLine[0] = "You have decided to " + message + " this " + whatTime + ".";
+	    cutscene.scriptLine[0] = "You decide to " + message + " this " + whatTime + ".";
 	    sceneID = attic3;
 	  }
 	}

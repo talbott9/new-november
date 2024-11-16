@@ -3,7 +3,7 @@ TTF_Font* gFontBig1 = NULL;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
 TTF_Font* gMonoFont = NULL;
-LTexture gTextbox, gAtticBG, gMenuBG, gStreet1BG;
+LTexture gTextbox, gNothing, gAtticBG, gMenuBG, gStreet1BG, gSkyBG, gOfficeBG;
 LTexture gLSPortrait, gHGPortrait;
 
 bool loadMedia() {
@@ -11,8 +11,11 @@ bool loadMedia() {
   if(!gTextbox.loadFromFile("resources/objects/textbox.png"))
     success = false;
   gAtticBG.loadFromFile("resources/bg/attic.png");
+  gNothing.loadFromFile("resources/bg/nothing.png");
+  gSkyBG.loadFromFile("resources/bg/sky.png");
   gMenuBG.loadFromFile("resources/bg/menu.png");
   gStreet1BG.loadFromFile("resources/bg/street1.png");
+  gOfficeBG.loadFromFile("resources/bg/office.png");
   gLSPortrait.loadFromFile("resources/chars/louis/louisportrait.png");
   gHGPortrait.loadFromFile("resources/chars/hildegarde/hildegardeportrait.png");
   return success;

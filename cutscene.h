@@ -39,7 +39,11 @@ class Cutscene {
   Portrait* charPortrait[NUM_PORTRAITS];
   portraitFace charFace[NUM_PORTRAITS][NUM_SCRIPT_LINES];
   std::string charName[NUM_SCRIPT_LINES];
-  
+  bgIDEnum bgID[NUM_SCRIPT_LINES];
+  bool changeBg[NUM_SCRIPT_LINES];
+  LTexture gOldBackground, gBackground;
+  int bgAlpha, bgSpeed, bgWaitTicks, skipTextTicks;
+  int bgWaitTime[NUM_SCRIPT_LINES];
  private:
   std::string s;
   char c;

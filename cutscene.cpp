@@ -1,6 +1,7 @@
 Cutscene::Cutscene() {
+  bgSpeed = 5;
   textbox= {camera.x, camera.h - 128 - camera.h/12, 800, 128};
-  wrpBnd = textbox.w - textbox.w/6*2;
+  wrpBnd = textbox.w;
   textX = textbox.x + textbox.w/4.5;
   textY = textbox.y + textbox.h/5;
   gTextFont = &gFont;
@@ -43,7 +44,7 @@ void Cutscene::reset() {
 void Cutscene::drawDialogueText(std::string s) {
   //drawTicks++;
   gText.loadFromRenderedText(charName[lineNumber], White, wrpBnd, *gTextFont);
-  gText.render(textX-75, textY);
+  gText.render(textX-50, textY);
   if(!doNotType) {
     if(!pause) {
       if(charCount < scriptLine[lineNumber].size()) {
@@ -55,7 +56,7 @@ void Cutscene::drawDialogueText(std::string s) {
       }
     }
     gText.loadFromRenderedText(textWritten, White, wrpBnd, *gTextFont);
-    gText.render(textX+25, textY);
+    gText.render(textX+75, textY);
 	
   } else {
     if(!pause) {
@@ -68,7 +69,24 @@ void Cutscene::drawDialogueText(std::string s) {
       }
     }
     gText.loadFromRenderedText(textWritten, White, wrpBnd, *gTextFont);
-    gText.render(textX+25, textY);
+    gText.render(textX+75, textY);
+  }
+}
+
+void Cutscene::skipText() {
+  if(canAdvance) {
+    skipTextTicks++;
+    if(skipTextTicks%3 == 0) {
+      doNotType = 0;
+      charCount = 0;
+      gText.free();
+      textWritten = "";
+      lineNumber++;
+    } else {
+      doNotType = 1;
+    }
+  } else {
+    bgAlpha = 255;
   }
 }
 
@@ -132,18 +150,60 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 
 void Cutscene::play() {
   canAdvance = true;
-  switch(bgID) {
-  case street1:
-    break;
+  /*SDL_Rect genRect = {0,0,camera.w,camera.h};
+  SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+  SDL_RenderFillRect(gRenderer, &genRect);*/
+  if(changeBg[lineNumber]) {
+    switch(bgID[lineNumber]) {
+    case bgBlack:
+      gBackground = gNothing;
+      break;
+    case bgAttic:
+      gBackground = gAtticBG;
+      break;
+    case bgSky:
+      gBackground = gSkyBG;
+      break;
+    case bgStreet1:
+      gBackground = gStreet1BG;
+      break;
+    case bgOffice:
+      gBackground = gOfficeBG;
+      break;
+    }
+    bgAlpha = 0;
+    bgWaitTicks = 0;
+    changeBg[lineNumber] = false;
   }
+
+  bgAlpha += bgSpeed;
+  bgWaitTicks++;
+  if(bgWaitTicks >= bgWaitTime[lineNumber]*60 && bgWaitTime[lineNumber] > 0)
+    lineNumber++;
+  if(bgAlpha > 255) {
+    bgAlpha = 255;
+      gOldBackground = gBackground;
+    
+  }
+  if(bgAlpha < 255)
+    gOldBackground.render(0,0);
+  gBackground.setAlpha(bgAlpha);
+  gBackground.render(0,0);
+  
   if(menuScreenID == scrAttic)
     canAdvance = false;
-  if(menu.blurAlpha == 0) {
+  if(menu.blurAlpha == 0 && bgAlpha == 255 && bgWaitTicks > bgWaitTime[lineNumber]*60) {
     if(createdPortrait[0]) 
       charPortrait[0]->render();
     gTextbox.render(textbox.x,textbox.y);
     indexScript();
     if(!(lineNumber >= totalNumberOfLines))
       drawDialogueText(scriptLine[lineNumber]);
+  } else {
+    canAdvance = false;
   }
+
+  if(tobasu)
+    skipText();
+    
 }
