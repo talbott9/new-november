@@ -1,13 +1,13 @@
 class Portrait {
 public:
-  Portrait(bool changeM, bool mov, int x, int y);
+  Portrait(bool changeM, bool mov, int x, int y, int textureID);
   void moveToXY(double x, double y, double speed, bool drag = true);
-  bool moved, reachedTarget, changeMove, changedMove;
+  bool moved, reachedTarget, changeMove, changedMove, show;
   double distance, accX, accY, dx, dy, speed;
   int posX, posY, defaultPosX, defaultPosY, targetX, targetX1, targetX2;
   SDL_Rect mBox;
   LTexture* gTexture;
-  int darkenTicks;
+  int darkenTicks, alpha;
   LTexture* gFace;
   void render();
 };
@@ -25,9 +25,15 @@ class Cutscene {
   void blur();
   void reset();
   void gameOverScreen();
+  void addL(charIDEnum characterID, std::string s);
+  void addChoice(int number, std::string c1 = "", std::string c2 = "", std::string c3 = "");
+  void changeBackground(bgIDEnum id, int wait = 0);
+  void changeShowCharacter(charIDEnum characterID, bool show);
+  void choiceBoxAnim();
 
-  SDL_Rect textbox;
-  std::string scriptLine[NUM_SCRIPT_LINES];
+  SDL_Rect textbox, mouseBox;
+  SDL_Rect choiceBoxes[3];
+  std::vector<std::string> scriptLine;
   bool heroTalking[NUM_SCRIPT_LINES];
   std::string textWritten;
   LTexture* gTextboxTexture = &gTextbox;
@@ -37,14 +43,20 @@ class Cutscene {
   //Control character slide-on-screen animation
   bool createdPortrait[NUM_PORTRAITS];
   Portrait* charPortrait[NUM_PORTRAITS];
-  portraitFace charFace[NUM_PORTRAITS][NUM_SCRIPT_LINES];
-  std::string charName[NUM_SCRIPT_LINES];
-  bgIDEnum bgID[NUM_SCRIPT_LINES];
-  bool changeBg[NUM_SCRIPT_LINES];
+  std::vector<std::vector<portraitFace>> charFace;
+  std::vector<bgIDEnum> bgID;
+  std::vector<std::string> charName;
+  std::vector<bool> changeBg;
   LTexture gOldBackground, gBackground;
   int bgAlpha, bgSpeed, bgWaitTicks, skipTextTicks;
-  int bgWaitTime[NUM_SCRIPT_LINES];
- private:
+  std::vector<int> bgWaitTime;
+  std::vector<bool> changeShowChar;
+  bool showChar[NUM_PORTRAITS];
+  std::vector<bool> isChoice;
+  std::vector<int> numChoiceBoxes;
+  std::string strChoices[3];
+  int selectedChoice, choiceAlpha, choiceCycle;
+private:
   std::string s;
   char c;
   int i, charCount, lineNumber, totalNumberOfLines, wrpBnd, textX, textY;

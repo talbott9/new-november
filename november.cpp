@@ -4,11 +4,9 @@
 #include "renderer.h"
 #include "renderer.cpp"
 #include "media.cpp"
-#include "player.h"
-#include "player.cpp"
-#include "cutscene.h"
 #include "menu.h"
 #include "menu.cpp"
+#include "cutscene.h"
 #include "scripts.cpp"
 #include "cutscene.cpp"
 
@@ -30,16 +28,16 @@ int main(int argv, char** args) {
     menu.renderMenu();
     menu.handleEvent(e);
 
-    if(menuScreenID == scrAttic || menuScreenID == scrNone)
+    if(menuScreenID == scrNone) {
       cutscene.play();
+      cutscene.handleEvent(e, false);
+    }
 
     while( SDL_PollEvent( &e ) != 0 ) {
       //User requests quit
       if( e.type == SDL_QUIT )
 	quit = true;
     }
-
-    cutscene.handleEvent(e, false);
 
     if(menu.doBlur) {
       menu.blur1();

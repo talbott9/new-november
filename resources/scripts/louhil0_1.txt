@@ -1,0 +1,22 @@
+//Player chooses yes
+Same store as always, right? Okay.
+//transition to street
+I guess taking a walk once in a while's not bad.
+Breathing in the chilly afternoon breeze... I could say it's even enjoyable.
+//hildegarde enters
+Oh, Jonathan spotted.
+Why are you speaking of me like you just saw a rare car brand during a roadtrip?
+You use brands for that game? In my family, we use colors.
+So, what are you doing here?
+Errand, sir.
+Could it be... eggs?
+What?! How'd you know?!
+C-calm down, it's just a guess.
+Phew... I thought you could read my mind for a second.
+No one could read your mind.
+Since you're here, let's go together!
+All right, what way should we go?
+What do you mean 'what way'? Do you not know where the grocery is?
+Well, there's more than one, isn't there? So, which one?
+--Grocery store
+--Egg store

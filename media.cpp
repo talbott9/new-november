@@ -1,21 +1,17 @@
-TTF_Font* gFont = NULL;
-TTF_Font* gFontBig1 = NULL;
+TTF_Font *gFont, *gFontOutline;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
-TTF_Font* gMonoFont = NULL;
-LTexture gTextbox, gNothing, gAtticBG, gMenuBG, gStreet1BG, gSkyBG, gOfficeBG;
+LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gLivingRoomBG;
 LTexture gLSPortrait, gHGPortrait;
 
 bool loadMedia() {
   bool success = true;
   if(!gTextbox.loadFromFile("resources/objects/textbox.png"))
     success = false;
-  gAtticBG.loadFromFile("resources/bg/attic.png");
-  gNothing.loadFromFile("resources/bg/nothing.png");
-  gSkyBG.loadFromFile("resources/bg/sky.png");
+  gCoastBG.loadFromFile("resources/bg/coast.png");
   gMenuBG.loadFromFile("resources/bg/menu.png");
+  gLivingRoomBG.loadFromFile("resources/bg/livingroom.png");
   gStreet1BG.loadFromFile("resources/bg/street1.png");
-  gOfficeBG.loadFromFile("resources/bg/office.png");
   gLSPortrait.loadFromFile("resources/chars/louis/louisportrait.png");
   gHGPortrait.loadFromFile("resources/chars/hildegarde/hildegardeportrait.png");
   return success;
@@ -23,8 +19,8 @@ bool loadMedia() {
 
 void loadFont(int size) {
 	gFont= TTF_OpenFont("resources/fonts/font1.ttf", size);
-	gFontBig1 = TTF_OpenFont("resources/fonts/font1.ttf", size*1.5);
-	gMonoFont= TTF_OpenFont("resources/fonts/monofont.ttf", size);
+	gFontOutline = TTF_OpenFont("resources/fonts/font1.ttf", size);;
+	TTF_SetFontOutline(gFontOutline, 1); 
 	gFancyFont = TTF_OpenFont("resources/fonts/Basic Roman-BoldItalic.ttf", 40);
 	gBigFancyFont = TTF_OpenFont("resources/fonts/Basic Roman-BoldItalic.ttf", 70);
 }

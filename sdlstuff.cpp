@@ -6,15 +6,15 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
+#include <vector>
 
 SDL_Window* gWindow = NULL;
 SDL_GameController* gGameController = NULL;
 SDL_Joystick* gJoystick = NULL;
 const int JOYSTICK_DEAD_ZONE = 8000;
-int SCREEN_WIDTH = 1280;
-int SCREEN_HEIGHT = 720;
+int SCREEN_WIDTH = 800;
+int SCREEN_HEIGHT = 600;
 SDL_Renderer* gRenderer = NULL;
-const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 
 bool init()
 {
@@ -43,7 +43,7 @@ bool init()
     }
 
     //Create window
-    gWindow = SDL_CreateWindow("A Noble's Fate", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    gWindow = SDL_CreateWindow("November", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if(gWindow == NULL) {
       printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
       success = false;
