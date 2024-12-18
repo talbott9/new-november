@@ -1,13 +1,14 @@
 Cutscene::Cutscene() {
   bgSpeed = 5;
   textbox= {camera.x, camera.h - 128 - camera.h/12, 800, 128};
-  wrpBnd = textbox.w - textbox.w/6*3;
-  textX = textbox.x + textbox.w/4.5;
+  wrpBnd = textbox.w - textbox.w/6*3.25;
+  textX = textbox.x + textbox.w/4.5 - 15;
   textY = textbox.y + textbox.h/5;
   gTextFont = &gFont;
   for(int i = 0; i < NUM_PORTRAITS; i++) {
     charPortrait[i] = new Portrait(false, false, 0, 0, i);
   }
+  protagPortrait = new Portrait(false, false, 0, 0, -1);
   for(int i = 0; i < 3; i++)
     choiceBoxes[i] = {textX, textY + 35*i, textbox.w-textbox.w/6*3, 35};
   choiceAlpha = 100;
@@ -33,16 +34,25 @@ Portrait::Portrait(bool changeM, bool mov, int x, int y, int textureID) {
   alpha = 0;
   switch(textureID) {
   case 0:
-    gTexture = &gLSPortrait;
+    gTexture = gLSPortrait;
     break;
   case 1:
-    gTexture = &gHGPortrait;
+    gTexture = gHGPortrait;
     break;
+  }
+
+  if(textureID == -1) {
+    sizeX = 2480*0.35;
+    sizeY = 3508*0.35;
+    mBox.x = cutscene.textbox.w*0.3;
+    mBox.y = cutscene.textbox.y-cutscene.textbox.h*1.5;
   }
 }
 
 void Portrait::render() {
-  gTexture->render(posX, posY);
+  // SDL_Rect clip = {0, 0, 500, 500};
+  gTexture.render(mBox.x, mBox.y);
+  gFace[face[cutscene.lineNumber]].render(mBox.x, mBox.y);
 }
 
 
@@ -54,6 +64,12 @@ void Cutscene::reset() {
   hasIndexedScript = false;
   lineNumber = 0;
   bgWaitTicks = 0;
+  selectedChoice = -1;
+  choiceAlpha = 255;
+  choiceCycle = 0;
+  chosenPath = 0;
+  choiceTicks = 0;
+  mouseIsOnChoice = false;
 }
 
 void Cutscene::addL(charIDEnum characterID, std::string s) {
@@ -88,8 +104,18 @@ void Cutscene::addChoice(int number, std::string c1, std::string c2, std::string
   numChoiceBoxes[scriptLine.size()-1] = number;
 }
 
-void Cutscene::changeShowCharacter(charIDEnum characterID, bool show) {
-  charPortrait[characterID]->show = show;
+void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, bool show) {
+  if(characterID == protag) {
+    protagPortrait->show = show;
+    protagPortrait->face.resize(scriptLine.size());
+    while(protagPortrait->face.size() < NUM_SCRIPT_LINES)
+      protagPortrait->face.push_back(fac);
+  } else {
+    charPortrait[characterID]->show = show;
+    charPortrait[characterID]->face.resize(scriptLine.size());
+    while(charPortrait[characterID]->face.size() < NUM_SCRIPT_LINES)
+      charPortrait[characterID]->face.push_back(fac);
+  }
   changeShowChar.resize(scriptLine.size());
   changeShowChar.push_back(true);
 }
@@ -102,6 +128,8 @@ void Cutscene::changeBackground(bgIDEnum id, int wait) {
   bgID.push_back(id);
   changeBg.push_back(true);
   bgWaitTime.push_back(wait);
+  if(wait != 0)
+    addL(none, "");
 }
 
 
@@ -174,26 +202,28 @@ void Cutscene::skipText() {
 }
 
 void Cutscene::choiceBoxAnim() {
-  if(selectedChoice >= 0) {
-    if(choiceCycle == 0) {
-      choiceAlpha -= 4;
-      if(choiceAlpha <= 50) {
-	choiceAlpha = 50;
-	choiceCycle = 1;
+  if(mouseIsOnChoice) {
+    if(selectedChoice >= 0) {
+      if(choiceCycle == 0) {
+	choiceAlpha -= 4;
+	if(choiceAlpha <= 50) {
+	  choiceAlpha = 50;
+	  choiceCycle = 1;
+	}
+      } else if(choiceCycle == 1) {
+	choiceAlpha += 4;
+	if(choiceAlpha >= 200) {
+	  choiceAlpha = 200;
+	  choiceCycle = 0;
+	}
       }
-    } else if(choiceCycle == 1) {
-      choiceAlpha += 4;
-      if(choiceAlpha >= 200) {
-	choiceAlpha = 200;
-	choiceCycle = 0;
-      }
+      SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);	
+      SDL_SetRenderDrawColor(gRenderer, 255, 155, 155, choiceAlpha);
+      SDL_RenderFillRect(gRenderer, &choiceBoxes[selectedChoice]);
+    } else {
+      choiceAlpha = 200;
+      choiceCycle = 0;
     }
-    SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);	
-    SDL_SetRenderDrawColor(gRenderer, 255, 155, 155, choiceAlpha);
-    SDL_RenderFillRect(gRenderer, &choiceBoxes[selectedChoice]);
-  } else {
-    choiceAlpha = 200;
-    choiceCycle = 0;
   }
 }
 
@@ -201,33 +231,24 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
   bool upKey, downKey, leftKey, rightKey, zKey, xKey, cKey, lShiftKey, escKey, lCtrlKey;
   bool mouseLeft;
   int mouseX, mouseY;
+  mouseIsOnChoice = false;
   mouseLeft = SDL_GetMouseState(&mouseX, &mouseY) == 1;
   mouseBox = {mouseX,mouseY,1,1};
-    if(!controller) {
-      upKey = currentKeyStates[SDL_SCANCODE_UP];
-      downKey = currentKeyStates[SDL_SCANCODE_DOWN];
-      leftKey = currentKeyStates[SDL_SCANCODE_LEFT];
-      rightKey = currentKeyStates[SDL_SCANCODE_RIGHT];
-      zKey = currentKeyStates[SDL_SCANCODE_Z] || currentKeyStates[SDL_SCANCODE_J] || currentKeyStates[SDL_SCANCODE_RETURN] || currentKeyStates[SDL_SCANCODE_KP_ENTER];
-      xKey = currentKeyStates[SDL_SCANCODE_X];
-      cKey = currentKeyStates[SDL_SCANCODE_C];
-      lShiftKey = currentKeyStates[SDL_SCANCODE_LSHIFT];
-      escKey = currentKeyStates[SDL_SCANCODE_ESCAPE];
-      lCtrlKey = currentKeyStates[SDL_SCANCODE_LCTRL];
-    } else {
-      upKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) || currentKeyStates[SDL_SCANCODE_UP];
-      downKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER) || currentKeyStates[SDL_SCANCODE_DOWN];
-      leftKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_LEFT) || currentKeyStates[SDL_SCANCODE_LEFT];
-      rightKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || currentKeyStates[SDL_SCANCODE_RIGHT];
-      zKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) || currentKeyStates[SDL_SCANCODE_Z]  || currentKeyStates[SDL_SCANCODE_J] || currentKeyStates[SDL_SCANCODE_RETURN] || currentKeyStates[SDL_SCANCODE_KP_ENTER];
-      xKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y) || currentKeyStates[SDL_SCANCODE_X];
-      lCtrlKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) || currentKeyStates[SDL_SCANCODE_LCTRL];
-      lShiftKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) || currentKeyStates[SDL_SCANCODE_LSHIFT];
-      escKey = SDL_GameControllerGetButton(gGameController, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) || currentKeyStates[SDL_SCANCODE_ESCAPE];
-    }
+  if(!controller) {
+    upKey = currentKeyStates[SDL_SCANCODE_UP];
+    downKey = currentKeyStates[SDL_SCANCODE_DOWN];
+    leftKey = currentKeyStates[SDL_SCANCODE_LEFT];
+    rightKey = currentKeyStates[SDL_SCANCODE_RIGHT];
+    zKey = currentKeyStates[SDL_SCANCODE_RETURN] || currentKeyStates[SDL_SCANCODE_KP_ENTER] || currentKeyStates[SDL_SCANCODE_SPACE] ;
+    xKey = currentKeyStates[SDL_SCANCODE_X];
+    cKey = currentKeyStates[SDL_SCANCODE_C];
+    lShiftKey = currentKeyStates[SDL_SCANCODE_LSHIFT];
+    escKey = currentKeyStates[SDL_SCANCODE_ESCAPE];
+    lCtrlKey = currentKeyStates[SDL_SCANCODE_LCTRL] || currentKeyStates[SDL_SCANCODE_RCTRL];
+  }
     if(canAdvance) {
       if(zKey || mouseLeft) {
-	if(!advancedDialogue) {
+	if(!pressedKey[z]) {
 	  if(charCount < scriptLine[lineNumber].size()) {
 	    doNotType = 1;
 	  } else {
@@ -238,9 +259,9 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 	    lineNumber++;
 	  }
 	}
-	advancedDialogue = true;
+        pressedKey[z] = true;
       } else {
-	advancedDialogue = false;
+	pressedKey[z] = false;
       }
     }
     if(lCtrlKey) {
@@ -256,33 +277,63 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
     }
 
     if(isChoice[lineNumber]) {
-      if(upKey) {
-	if(!pressedKey[up]) {
-	  selectedChoice--;
-	  if(selectedChoice < 0)
-	    selectedChoice = 0;
+      choiceTicks++;
+      if(choiceTicks > 30) {
+	bool chose = false;
+	if(upKey) {
+	  if(!pressedKey[up]) {
+	    /*
+	    selectedChoice--;
+	    if(selectedChoice < 0)
+	    selectedChoice = 0;*/
+	    SDL_WarpMouseInWindow(gWindow, choiceBoxes[0].x + choiceBoxes[0].w/1.25, choiceBoxes[0].y + choiceBoxes[0].h/2);
+	  }
+	  pressedKey[up] = true;
+	} else {
+	  pressedKey[up] = false;
 	}
-	pressedKey[up] = true;
-      } else {
-	pressedKey[up] = false;
-      }
-      if(downKey) {
-	if(!pressedKey[down]) {
-	  selectedChoice++;
-	  if(selectedChoice >= numChoiceBoxes[lineNumber])
-	    selectedChoice = numChoiceBoxes[lineNumber]-1;
+	if(downKey) {
+	  if(!pressedKey[down]) {
+	    /*
+	    selectedChoice++;
+	    if(selectedChoice >= numChoiceBoxes[lineNumber])
+	    selectedChoice = numChoiceBoxes[lineNumber]-1;*/
+	    SDL_WarpMouseInWindow(gWindow, choiceBoxes[1].x + choiceBoxes[1].w/1.25, choiceBoxes[1].y + choiceBoxes[1].h/2);
+	  }
+	  pressedKey[down] = true;
+	} else {
+	  pressedKey[down] = false;
 	}
-	pressedKey[down] = true;
-      } else {
-	pressedKey[down] = false;
-      }
-      for(int i = 0; i < numChoiceBoxes[lineNumber]; i++) {
-	if(checkCollision(mouseBox,choiceBoxes[i])) {
-	  selectedChoice = i;
+      
+	if(zKey) {
+	  if(!pressedKey[z]) {
+	    chose = true;
+	  }
+	  pressedKey[z] = true;
+	} else {
+	  pressedKey[z] = false;
+	}
+      
+	for(int i = 0; i < numChoiceBoxes[lineNumber]; i++) {
+	  if(checkCollision(mouseBox,choiceBoxes[i])) {
+	    mouseIsOnChoice = true;
+	    selectedChoice = i;
+	    if(mouseLeft) {
+	      if(!pressedKey[mleft])
+		chose = true;
+	      pressedKey[mleft] = true;
+	    } else {
+	      pressedKey[mleft] = false;
+	    }
+	  }
+	}
+	if(chose && selectedChoice != -1) {
+	  canAdvance = true;
+	  determineScene(sceneID, selectedChoice);
+	  reset();
 	}
       }
     }
-    
 }
 
 void Cutscene::play() {
@@ -317,6 +368,10 @@ void Cutscene::play() {
 	showChar[i] = false;
       }
     }
+    if(protagPortrait->show)
+      showProtag = true;
+    else
+      showProtag = false;
     changeShowChar[lineNumber] = false;
   }
   
@@ -339,8 +394,11 @@ void Cutscene::play() {
     if(!(lineNumber >= totalNumberOfLines)) {
       gTextbox.render(textbox.x,textbox.y);
       if(isChoice[lineNumber]) {
-	choiceBoxAnim();
 	canAdvance = false;
+	choiceBoxAnim();
+      }
+      if(showProtag) {
+	protagPortrait->render();
       }
       drawDialogueText(scriptLine[lineNumber]);
     } else {

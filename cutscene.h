@@ -6,10 +6,12 @@ public:
   double distance, accX, accY, dx, dy, speed;
   int posX, posY, defaultPosX, defaultPosY, targetX, targetX1, targetX2;
   SDL_Rect mBox;
-  LTexture* gTexture;
+  LTexture gTexture;
+  LTexture gFace[20];
   int darkenTicks, alpha;
-  LTexture* gFace;
   void render();
+  int sizeX, sizeY;
+  std::vector<portraitFace> face;
 };
 
 class Cutscene {
@@ -28,8 +30,9 @@ class Cutscene {
   void addL(charIDEnum characterID, std::string s);
   void addChoice(int number, std::string c1 = "", std::string c2 = "", std::string c3 = "");
   void changeBackground(bgIDEnum id, int wait = 0);
-  void changeShowCharacter(charIDEnum characterID, bool show);
+  void changeShowCharacter(charIDEnum characterID, portraitFace fac = neutralFace, bool show = true);
   void choiceBoxAnim();
+  void determineScene(sceneIDEnum sId, int selButton);
 
   SDL_Rect textbox, mouseBox;
   SDL_Rect choiceBoxes[3];
@@ -43,6 +46,8 @@ class Cutscene {
   //Control character slide-on-screen animation
   bool createdPortrait[NUM_PORTRAITS];
   Portrait* charPortrait[NUM_PORTRAITS];
+  Portrait* protagPortrait;
+  bool showProtag;
   std::vector<std::vector<portraitFace>> charFace;
   std::vector<bgIDEnum> bgID;
   std::vector<std::string> charName;
@@ -55,8 +60,8 @@ class Cutscene {
   std::vector<bool> isChoice;
   std::vector<int> numChoiceBoxes;
   std::string strChoices[3];
-  int selectedChoice, choiceAlpha, choiceCycle;
-private:
+  int selectedChoice, choiceAlpha, choiceCycle, chosenPath, choiceTicks;
+  bool mouseIsOnChoice;
   std::string s;
   char c;
   int i, charCount, lineNumber, totalNumberOfLines, wrpBnd, textX, textY;

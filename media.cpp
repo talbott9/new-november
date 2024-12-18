@@ -3,6 +3,7 @@ TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
 LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gLivingRoomBG;
 LTexture gLSPortrait, gHGPortrait;
+LTexture gNathanFace[20];
 
 bool loadMedia() {
   bool success = true;
@@ -12,9 +13,13 @@ bool loadMedia() {
   gMenuBG.loadFromFile("resources/bg/menu.png");
   gLivingRoomBG.loadFromFile("resources/bg/livingroom.png");
   gStreet1BG.loadFromFile("resources/bg/street1.png");
-  gLSPortrait.loadFromFile("resources/chars/louis/louisportrait.png");
+  if(!gLSPortrait.loadFromFile("resources/chars/nathan/nathanportrait.png"))
+    success = false;
   gHGPortrait.loadFromFile("resources/chars/hildegarde/hildegardeportrait.png");
-  return success;
+  if(!gNathanFace[neutralFace].loadFromFile("resources/chars/nathan/nathanfaceneutral.png"))
+    success = false;
+  gNathanFace[angryFace].loadFromFile("resources/chars/nathan/nathanfaceangry.png");
+    return success;
 }
 
 void loadFont(int size) {

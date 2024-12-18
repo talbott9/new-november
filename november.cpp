@@ -45,6 +45,12 @@ int main(int argv, char** args) {
       menu.blurSuccess[0] = false;
       menu.blurSuccess[1] = false;
     }
+
+    if(debugMode) {
+      int mouseX, mouseY;
+      SDL_GetMouseState(&mouseX, &mouseY);
+      printf("Mouse at: %i/%i\n", mouseX, mouseY);
+    }
     
     
     if( (1000/fps) > SDL_GetTicks() - starting_tick )

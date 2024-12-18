@@ -1,25 +1,5 @@
 //Grocery store
-There's a grocery store down the street, isn't there? I think I saw your mom there sometimes.
-All right, target acquired! Let's-a-go-go!
-Please don't act like this when we're there.
-//Transition to grocery
-We have arrived! Surrender your booty!
-O-ho-ho! 'Tis a fine pudding we have here, quite worthy of plunder.
-What thinkst thou, boatswain?
-What happened to my captain rank? Also, you pronounced that wrong.
-Oh, have you started to get into it?
-There's the dairy section. What egg color does your mom prefer?
-Huh? Now that you mention it, I don't really know. Most of the time I only see the eggs when they're already cooked.
-Don't you ever help out at home or anything?
-My mom doesn't like me to help out for some reason. She says I have the opposite of Midas' touch.
-Well, then we'll just get the white ones. Here.
-What about you? Do you help out a lot?
-I guess so. I don't like leaving everything to my parents. Makes me sort of guilty.
-That's pretty nice of you.
-I think it's normal.
-That's what's nice about you, dummy.
-Are you... complimenting me?
-Yea, sailor.
-Well, I guess you also... Hmm...
---Are fun to be around
---Have pretty hair
+I'll go to the grocery store. It's closer.
+Hmm, that's a good point.
+Then let's-a-go-go!
+//bg grocery
