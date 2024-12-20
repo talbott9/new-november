@@ -7,6 +7,7 @@ public:
   int mouseX, mouseY;
   std::string names[2];
   void renderMenu();
+  void reset();
   void handleEvent(SDL_Event& e);
   LTexture gText;
   SDL_Rect mouseBox;
@@ -19,5 +20,6 @@ public:
   int blurAlpha;
   SDL_Rect blurBoxes[10];
   int blurSpeed = 4;
+  int menuBuffer;
 };
 

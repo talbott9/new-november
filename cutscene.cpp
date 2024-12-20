@@ -30,7 +30,6 @@ Portrait::Portrait(bool changeM, bool mov, int x, int y, int textureID) {
   darkenTicks = 155;
   changedMove = 0;
   targetX = x;
-  show = false;
   alpha = 0;
   switch(textureID) {
   case 0:
@@ -41,18 +40,57 @@ Portrait::Portrait(bool changeM, bool mov, int x, int y, int textureID) {
     break;
   }
 
+  
+  sizeX = 2480;
+  sizeY = 3508;
+
+  isProtag = false;
+
   if(textureID == -1) {
     sizeX = 2480*0.35;
     sizeY = 3508*0.35;
     mBox.x = cutscene.textbox.w*0.3;
     mBox.y = cutscene.textbox.y-cutscene.textbox.h*1.5;
+    alpha = 255;
+    isProtag = true;
   }
 }
 
 void Portrait::render() {
   // SDL_Rect clip = {0, 0, 500, 500};
+  if(!isProtag) {
+    if(cutscene.bgAlpha < 255 || disappear[cutscene.lineNumber]) {
+      if(alpha > 0) {
+	if(disappear[cutscene.lineNumber])
+	  alpha -= 7;
+	else
+	  alpha -= 10;
+	if(alpha < 0) {
+	  alpha = 0;
+	}
+      }
+    } else if(cutscene.bgWaitTicks > cutscene.bgWaitTime[cutscene.lineNumber]*60) {
+      if(alpha < 255) {
+	alpha += 10;
+	if(alpha > 255)
+	  alpha = 255;
+      }
+    }
+    gTexture.setAlpha(alpha);
+    gFace[face[cutscene.lineNumber]].setAlpha(alpha);
+    gTexture.mWidth = size[0][cutscene.lineNumber];
+    gTexture.mHeight = size[1][cutscene.lineNumber];
+    gFace[face[cutscene.lineNumber]].mWidth = size[0][cutscene.lineNumber];
+    gFace[face[cutscene.lineNumber]].mHeight = size[1][cutscene.lineNumber];
+    mBox.x = xy[0][cutscene.lineNumber];
+    mBox.y = xy[1][cutscene.lineNumber];
+  }
   gTexture.render(mBox.x, mBox.y);
   gFace[face[cutscene.lineNumber]].render(mBox.x, mBox.y);
+}
+
+void Portrait::reset() {
+  alpha = 255;
 }
 
 
@@ -72,9 +110,12 @@ void Cutscene::reset() {
   mouseIsOnChoice = false;
 }
 
-void Cutscene::addL(charIDEnum characterID, std::string s) {
+void Cutscene::addL(charIDEnum characterID, std::string s, bool addQuotes) {
   std::string name = "";
   switch(characterID) {
+  case clerk:
+    name = "Clerk";
+    break;
   case mom:
     name = "Mom";
     break;
@@ -87,10 +128,10 @@ void Cutscene::addL(charIDEnum characterID, std::string s) {
   }
   charName.push_back(name);
   std::string msg = "";
-  if(characterID != none)
+  if(characterID != none && addQuotes)
     msg += "\"";
   msg += s;
-  if(characterID != none)
+  if(characterID != none && addQuotes)
     msg += "\"";
   scriptLine.push_back(msg);
 }
@@ -104,20 +145,80 @@ void Cutscene::addChoice(int number, std::string c1, std::string c2, std::string
   numChoiceBoxes[scriptLine.size()-1] = number;
 }
 
-void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, bool show) {
+void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int x, int y, int w, int h, int textureNumber, bool shew, int type) {
   if(characterID == protag) {
-    protagPortrait->show = show;
+    protagPortrait->alpha = 255;
     protagPortrait->face.resize(scriptLine.size());
     while(protagPortrait->face.size() < NUM_SCRIPT_LINES)
       protagPortrait->face.push_back(fac);
+    if(shew != -1) {
+      protagPortrait->show.resize(scriptLine.size());
+      while(protagPortrait->show.size() < NUM_SCRIPT_LINES)
+	protagPortrait->show.push_back(shew);
+    }
   } else {
-    charPortrait[characterID]->show = show;
+    if(!charPortrait[characterID]->show[lineNumber] && type == 1) {
+      charPortrait[characterID]->alpha = 0;
+    }
+    if(type == 2) {
+      bgWaitTime.resize(scriptLine.size());
+      bgWaitTime.push_back(1);
+      addL(none, "");
+      charPortrait[characterID]->disappear[scriptLine.size()-1] = true;
+    }
+    
     charPortrait[characterID]->face.resize(scriptLine.size());
     while(charPortrait[characterID]->face.size() < NUM_SCRIPT_LINES)
       charPortrait[characterID]->face.push_back(fac);
+
+    if(shew != -1 && type != 2) {
+      charPortrait[characterID]->show.resize(scriptLine.size());
+      while(charPortrait[characterID]->show.size() < NUM_SCRIPT_LINES)
+	charPortrait[characterID]->show.push_back(shew);
+    }
+    
+    if(textureNumber != -1)
+      determineTexture(characterID, textureNumber);
+    if(w != -1) {
+      charPortrait[characterID]->size[0].resize(scriptLine.size());
+      while(charPortrait[characterID]->size[0].size() < NUM_SCRIPT_LINES)
+	charPortrait[characterID]->size[0].push_back(w);
+    }
+    if(h != -1) {
+      charPortrait[characterID]->size[1].resize(scriptLine.size());
+      while(charPortrait[characterID]->size[1].size() < NUM_SCRIPT_LINES)
+	charPortrait[characterID]->size[1].push_back(h);
+    }
+    if(x != -1) {
+      charPortrait[characterID]->xy[0].resize(scriptLine.size());
+      while(charPortrait[characterID]->xy[0].size() < NUM_SCRIPT_LINES)
+	charPortrait[characterID]->xy[0].push_back(x);
+    }
+    if(y != -1) {
+      charPortrait[characterID]->xy[1].resize(scriptLine.size());
+      while(charPortrait[characterID]->xy[1].size() < NUM_SCRIPT_LINES)
+	charPortrait[characterID]->xy[1].push_back(y);
+    }
   }
   changeShowChar.resize(scriptLine.size());
   changeShowChar.push_back(true);
+}
+
+void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
+  switch(textureNumber) {
+  case 0:
+    switch(characterID) {
+    case nathan:
+      charPortrait[characterID]->gTexture = gLSPortrait;
+      break;
+    case mary:
+      charPortrait[characterID]->gTexture = gHGPortrait;
+      break;
+    }
+    break;
+  }
+  for(int i = 0; i < NUM_FACES; i++)
+    charPortrait[characterID]->gFace[i] = gCharFace[characterID][i];
 }
 
 void Cutscene::changeBackground(bgIDEnum id, int wait) {
@@ -185,20 +286,31 @@ void Cutscene::drawDialogueText(std::string s) {
 
 void Cutscene::skipText() {
   if(canAdvance) {
-    skipTextTicks++;
-    if(skipTextTicks%3 == 0) {
+    if(skipTextTicks%3 == 0 && skipTextTicks > 0) {
       doNotType = 0;
       charCount = 0;
       gText.free();
       textWritten = "";
+      for(int i = 0; i < NUM_CHARS; i++) {
+	if(charPortrait[i]->disappear[lineNumber]) {
+	  charPortrait[i]->show.resize(scriptLine.size());
+	  while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+	    charPortrait[i]->show.push_back(false);
+	}
+      }
       lineNumber++;
+      bgWaitTicks = 0;
     } else {
       doNotType = 1;
     }
-  } else {
+    for(int i = 0; i < NUM_CHARS; i++) {
+      charPortrait[i]->alpha = 255;
+    }
+    skipTextTicks++;
+  } /*else {
     bgAlpha = 255;
     bgWaitTicks = BIG_NUMBER;
-  }
+    }*/
 }
 
 void Cutscene::choiceBoxAnim() {
@@ -246,7 +358,7 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
     escKey = currentKeyStates[SDL_SCANCODE_ESCAPE];
     lCtrlKey = currentKeyStates[SDL_SCANCODE_LCTRL] || currentKeyStates[SDL_SCANCODE_RCTRL];
   }
-    if(canAdvance) {
+    if(canAdvance && !tobasu) {
       if(zKey || mouseLeft) {
 	if(!pressedKey[z]) {
 	  if(charCount < scriptLine[lineNumber].size()) {
@@ -257,6 +369,7 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 	    gText.free();
 	    textWritten = "";
 	    lineNumber++;
+	    bgWaitTicks = 0;
 	  }
 	}
         pressedKey[z] = true;
@@ -270,6 +383,7 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
       hasTobasu = true;
     } else {
       tobasu = false;
+      skipTextTicks = 0;
       if(hasTobasu) {
 	//something
       }
@@ -351,17 +465,23 @@ void Cutscene::play() {
     case bgStreet1:
       gBackground = gStreet1BG;
       break;
+    case bgStreet2:
+      gBackground = gStreet2BG;
+      break;
     case bgLivingRoom:
       gBackground = gLivingRoomBG;
+      break;
+    case bgGrocery:
+      gBackground = gGroceryBG;
       break;
     }
     bgAlpha = 0;
     bgWaitTicks = 0;
     changeBg[lineNumber] = false;
   }
-
+  /*
   if(changeShowChar[lineNumber]) {
-    for(int i = 0; i < NUM_PORTRAITS; i++) {
+    for(int i = 0; i < NUM_CHARS; i++) {
       if(charPortrait[i]->show) {
 	showChar[i] = true;
       } else {
@@ -373,7 +493,7 @@ void Cutscene::play() {
     else
       showProtag = false;
     changeShowChar[lineNumber] = false;
-  }
+    }*/
   
   bgAlpha += bgSpeed;
   if(bgAlpha > 255) {
@@ -384,30 +504,46 @@ void Cutscene::play() {
     gOldBackground.render(0,0);
   gBackground.setAlpha(bgAlpha);
   gBackground.render(0,0);
-  
-  if(menu.blurAlpha == 0 && bgAlpha == 255 && bgWaitTicks > bgWaitTime[lineNumber]*60) {
-    for(int i = 0; i < NUM_PORTRAITS; i++) {
-      if(showChar[i]) {
-	charPortrait[i]->render();
+
+  bool disp = false;
+  for(int i = 0; i < NUM_CHARS; i++) {
+    if(charPortrait[i]->show[lineNumber]) 
+      charPortrait[i]->render();
+    if(charPortrait[i]->disappear[lineNumber]) {
+      disp = true;
+      if(charPortrait[i]->alpha == 0) {
+	charPortrait[i]->disappear[lineNumber] = false;
+	charPortrait[i]->show.clear();
+	while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+	  charPortrait[i]->show.push_back(false);
       }
     }
+  }
+  
+  if(menu.blurAlpha == 0 && bgAlpha == 255 && bgWaitTicks > bgWaitTime[lineNumber]*60 && !disp) {
     if(!(lineNumber >= totalNumberOfLines)) {
       gTextbox.render(textbox.x,textbox.y);
       if(isChoice[lineNumber]) {
 	canAdvance = false;
 	choiceBoxAnim();
       }
-      if(showProtag) {
+      if(protagPortrait->show[lineNumber]) {
 	protagPortrait->render();
       }
       drawDialogueText(scriptLine[lineNumber]);
     } else {
       reset();
+      menuScreenID = scrMainMenu;
+      menu.reset();
+      sceneID = scene0;
+      for(int i = 0; i < NUM_CHARS; i++) {
+	showChar[i] = false;
+	charPortrait[i]->reset();
+      }
     }
   } else {
     canAdvance = false;
   }
-
   if(tobasu)
     skipText();
 }

@@ -52,7 +52,6 @@ int main(int argv, char** args) {
       printf("Mouse at: %i/%i\n", mouseX, mouseY);
     }
     
-    
     if( (1000/fps) > SDL_GetTicks() - starting_tick )
       SDL_Delay(1000/fps - (SDL_GetTicks() - starting_tick));
     frame_time = SDL_GetTicks()-starting_tick;

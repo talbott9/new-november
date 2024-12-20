@@ -1,25 +1,49 @@
 TTF_Font *gFont, *gFontOutline;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
-LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gLivingRoomBG;
+LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet2BG, gLivingRoomBG, gGroceryBG;
 LTexture gLSPortrait, gHGPortrait;
-LTexture gNathanFace[20];
+LTexture gCharFace[2][20];
 
 bool loadMedia() {
   bool success = true;
+  std::string faceDir[20];
+  std::string nameStr[NUM_CHARS];
+  nameStr[nathan] = "nathan";
+  nameStr[mary] = "mary";
+  
+  faceDir[neutralFace] = "faceneutral.png";
+  faceDir[neutralFace2] = "faceneutral2.png";
+  faceDir[angryFace] = "faceangry.png";
+  faceDir[angryFace2] = "faceangry2.png";
+  faceDir[sadFace] = "facesad.png";
+  faceDir[happyFace] = "facehappy.png";
+  faceDir[happyFace2] = "facehappy2.png";
+  faceDir[happyFace3] = "facehappy3.png";
+  faceDir[mairiFace] = "facemairi.png";
+  faceDir[surpriseFace] = "facesurprise.png";
+  faceDir[surpriseFace2] = "facesurprise2.png";
+  faceDir[surpriseFace3] = "facesurprise3.png";
+  
   if(!gTextbox.loadFromFile("resources/objects/textbox.png"))
     success = false;
   gCoastBG.loadFromFile("resources/bg/coast.png");
   gMenuBG.loadFromFile("resources/bg/menu.png");
   gLivingRoomBG.loadFromFile("resources/bg/livingroom.png");
   gStreet1BG.loadFromFile("resources/bg/street1.png");
+  gStreet2BG.loadFromFile("resources/bg/street2.png");
+  gGroceryBG.loadFromFile("resources/bg/grocery.png");
   if(!gLSPortrait.loadFromFile("resources/chars/nathan/nathanportrait.png"))
     success = false;
-  gHGPortrait.loadFromFile("resources/chars/hildegarde/hildegardeportrait.png");
-  if(!gNathanFace[neutralFace].loadFromFile("resources/chars/nathan/nathanfaceneutral.png"))
+  if(!gHGPortrait.loadFromFile("resources/chars/mary/maryportrait.png"))
     success = false;
-  gNathanFace[angryFace].loadFromFile("resources/chars/nathan/nathanfaceangry.png");
-    return success;
+
+  for(int i = 0; i < NUM_CHARS; i++) {
+    for(int j = 0; j < NUM_FACES; j++) {
+      gCharFace[i][j].loadFromFile("resources/chars/" + nameStr[i] + "/" + nameStr[i] + faceDir[j]);
+    }
+  }
+  return success;
 }
 
 void loadFont(int size) {
