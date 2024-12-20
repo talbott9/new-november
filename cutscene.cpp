@@ -31,6 +31,8 @@ Portrait::Portrait(bool changeM, bool mov, int x, int y, int textureID) {
   changedMove = 0;
   targetX = x;
   alpha = 0;
+  animTicks = 0;
+  animCycle = 0;
   switch(textureID) {
   case 0:
     gTexture = gLSPortrait;
@@ -82,15 +84,46 @@ void Portrait::render() {
     gTexture.mHeight = size[1][cutscene.lineNumber];
     gFace[face[cutscene.lineNumber]].mWidth = size[0][cutscene.lineNumber];
     gFace[face[cutscene.lineNumber]].mHeight = size[1][cutscene.lineNumber];
-    mBox.x = xy[0][cutscene.lineNumber];
-    mBox.y = xy[1][cutscene.lineNumber];
+    switch(animationID[cutscene.lineNumber]) {
+    case 0:
+      mBox.x = xy[0][cutscene.lineNumber];
+      mBox.y = xy[1][cutscene.lineNumber];
+      break;
+    case 1:
+      mBox.x = xy[0][cutscene.lineNumber] + size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
+      mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
+      animTicks += 5;
+      if(animTicks > 180) {
+	animCycle++;
+	animTicks = 0;
+	if(animCycle > 1) {
+	  animCycle = 0;
+	  animationID[cutscene.lineNumber] = 0;
+	}
+      }
+      break;
+    case 2:
+      mBox.x = xy[0][cutscene.lineNumber] /*+ size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180)*/;
+      mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.002*sin(animTicks*PI/180);
+      animTicks += 10;
+      if(animTicks > 180) {
+	animCycle++;
+	animTicks = 0;
+	if(animCycle > 1) {
+	  animCycle = 0;
+	  animationID[cutscene.lineNumber] = 0;
+	}
+      }
+      break;
+    }
   }
   gTexture.render(mBox.x, mBox.y);
   gFace[face[cutscene.lineNumber]].render(mBox.x, mBox.y);
 }
 
 void Portrait::reset() {
-  alpha = 255;
+  animTicks = 0;
+  animCycle = 0;
 }
 
 
@@ -145,6 +178,7 @@ void Cutscene::addChoice(int number, std::string c1, std::string c2, std::string
   numChoiceBoxes[scriptLine.size()-1] = number;
 }
 
+//type 3 - fade in, type 4 - fade out, type 2 - fade out with pause
 void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int x, int y, int w, int h, int textureNumber, bool shew, int type) {
   if(characterID == protag) {
     protagPortrait->alpha = 255;
@@ -160,10 +194,15 @@ void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int
     if(!charPortrait[characterID]->show[lineNumber] && type == 1) {
       charPortrait[characterID]->alpha = 0;
     }
-    if(type == 2) {
+    if(type == 3) 
+      charPortrait[characterID]->appear[scriptLine.size()] = true;
+    else if(type == 2) {
       bgWaitTime.resize(scriptLine.size());
       bgWaitTime.push_back(1);
       addL(none, "");
+      charPortrait[characterID]->disappear[scriptLine.size()-1] = true;
+    }
+    else if(type == 4) {
       charPortrait[characterID]->disappear[scriptLine.size()-1] = true;
     }
     
@@ -202,6 +241,9 @@ void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int
   }
   changeShowChar.resize(scriptLine.size());
   changeShowChar.push_back(true);
+}
+void Cutscene::doAnim(charIDEnum characterID, int animID) {
+  charPortrait[characterID]->animationID[scriptLine.size()] = animID;
 }
 
 void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
@@ -292,10 +334,16 @@ void Cutscene::skipText() {
       gText.free();
       textWritten = "";
       for(int i = 0; i < NUM_CHARS; i++) {
+	charPortrait[i]->reset();
 	if(charPortrait[i]->disappear[lineNumber]) {
 	  charPortrait[i]->show.resize(scriptLine.size());
 	  while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
 	    charPortrait[i]->show.push_back(false);
+	}
+	if(charPortrait[i]->appear[lineNumber]) {
+	  charPortrait[i]->show.resize(scriptLine.size());
+	  while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+	    charPortrait[i]->show.push_back(true);
 	}
       }
       lineNumber++;
@@ -368,6 +416,19 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 	    charCount = 0;
 	    gText.free();
 	    textWritten = "";
+	    for(int i = 0; i < NUM_CHARS; i++) {
+	      charPortrait[i]->reset();
+	      if(charPortrait[i]->disappear[lineNumber]) {
+		charPortrait[i]->show.resize(scriptLine.size());
+		while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+		  charPortrait[i]->show.push_back(false);
+	      }
+	      if(charPortrait[i]->appear[lineNumber]) {
+		charPortrait[i]->show.resize(scriptLine.size());
+		while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+		  charPortrait[i]->show.push_back(true);
+	      }
+	    }
 	    lineNumber++;
 	    bgWaitTicks = 0;
 	  }
@@ -474,6 +535,12 @@ void Cutscene::play() {
     case bgGrocery:
       gBackground = gGroceryBG;
       break;
+    case bgStore:
+      gBackground = gStoreBG;
+      break;
+    case bgStoreInside:
+      gBackground = gStoreInsideBG;
+      break;
     }
     bgAlpha = 0;
     bgWaitTicks = 0;
@@ -507,8 +574,6 @@ void Cutscene::play() {
 
   bool disp = false;
   for(int i = 0; i < NUM_CHARS; i++) {
-    if(charPortrait[i]->show[lineNumber]) 
-      charPortrait[i]->render();
     if(charPortrait[i]->disappear[lineNumber]) {
       disp = true;
       if(charPortrait[i]->alpha == 0) {
@@ -518,9 +583,19 @@ void Cutscene::play() {
 	  charPortrait[i]->show.push_back(false);
       }
     }
+    else if(charPortrait[i]->appear[lineNumber]) {
+      charPortrait[i]->show.clear();
+      while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
+	charPortrait[i]->show.push_back(true);
+      charPortrait[i]->alpha = 0;
+      charPortrait[i]->appear[lineNumber] = false;
+    }
+	
+    if(charPortrait[i]->show[lineNumber]) 
+      charPortrait[i]->render();
   }
   
-  if(menu.blurAlpha == 0 && bgAlpha == 255 && bgWaitTicks > bgWaitTime[lineNumber]*60 && !disp) {
+  if(menu.blurAlpha == 0 && bgAlpha == 255 && bgWaitTicks > bgWaitTime[lineNumber]*60) {
     if(!(lineNumber >= totalNumberOfLines)) {
       gTextbox.render(textbox.x,textbox.y);
       if(isChoice[lineNumber]) {
@@ -540,6 +615,7 @@ void Cutscene::play() {
 	showChar[i] = false;
 	charPortrait[i]->reset();
       }
+      gOldBackground.mTexture = NULL;
     }
   } else {
     canAdvance = false;

@@ -18,6 +18,10 @@ public:
   std::vector<bool> show;
   bool isProtag;
   bool disappear[NUM_SCRIPT_LINES];
+  bool appear[NUM_SCRIPT_LINES];
+  int animationID[NUM_SCRIPT_LINES];
+  float animTicks;
+  int animCycle;
 };
 
 class Cutscene {
@@ -37,6 +41,7 @@ class Cutscene {
   void addChoice(int number, std::string c1 = "", std::string c2 = "", std::string c3 = "");
   void changeBackground(bgIDEnum id, int wait = 0);
   void changeShowCharacter(charIDEnum characterID, portraitFace fac = neutralFace, int x = -1, int y = -1, int w = -1, int h = -1, int textureNumber = -1, bool show = true, int type = -1);
+  void doAnim(charIDEnum characterID, int animID);
   void choiceBoxAnim();
   void determineScene(sceneIDEnum sId, int selButton);
   void determineTexture(charIDEnum characterID, int textureNumber);

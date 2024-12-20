@@ -6,6 +6,7 @@
 #define BIG_NUMBER 999999
 #define PORTRAIT_WIDTH 2480
 #define PORTRAIT_HEIGHT 3508
+#define PI 3.14159265
 
 const int defpw = 2480/2.5;
 const int defph = 3508/2.5; 
@@ -21,8 +22,8 @@ enum playerChars {playerLS, playerHG};
 playerChars playerChar = playerLS;
 enum friendChars {friendLS, friendHG};
 friendChars friendChar = friendHG;
-enum bgIDEnum {bgStreet1, bgStreet2, bgLivingRoom, bgGrocery};
-enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2};
+enum bgIDEnum {bgStreet1, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
+enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2, scene0_1_2_2, scene0_1_2_1};
 sceneIDEnum sceneID = 	scene0;
 enum charIDEnum {clerk = -4, protag = -3, none = -2, mom = -1, nathan, mary};
 

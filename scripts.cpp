@@ -27,6 +27,8 @@ void Cutscene::indexScript() {
       }
       for(int j = 0; j < NUM_SCRIPT_LINES; j++) {
 	charPortrait[i]->disappear[j] = false;
+	charPortrait[i]->appear[j] = false;
+	charPortrait[i]->animationID[j] = 0;
       }
     }
     protagPortrait->show.clear();
@@ -67,7 +69,7 @@ void Cutscene::indexScript() {
 	  addL(nathan, "Okay.");
 	  changeBackground(bgStreet1, 2);
 	  addL(nathan, ".........");
-	  changeShowCharacter(mary, happyFace3, pX, pY, defpw, defph, 0, 1, 1);
+	  changeShowCharacter(mary, happyFace3, pX, pY, defpw, defph, 0, 1, 3);
 	  addL(mary, "Gooooooooooooooooood!");
 	  addL(nathan, ".........");
 	  addL(mary, "After!");
@@ -120,7 +122,7 @@ void Cutscene::indexScript() {
 	  addL(nathan, "That's irrelevant.");
 	  addL(mary, "Please?");
 	  addL(nathan, ".........");
-	  addL(nathan, "Fine, but don't make a fuss.");
+	  addL(nathan, "Okay.");
 	  changeShowCharacter(mary, happyFace3);
 	  addL(mary, "Yay!");
 	  changeBackground(bgGrocery, 1);
@@ -147,6 +149,136 @@ void Cutscene::indexScript() {
 	  addL(mary, "Do you prefer the brown or white eggs?");
 	  addChoice(2, "White", "They're the same");
 	  break;
+	case scene0_1_2:
+	  changeShowCharacter(protag);
+	  changeShowCharacter(mary, happyFace, pX, pY, defpw, defph, 0);
+	  addL(nathan, "I'm looking for a new plastic model kit.");
+	  changeShowCharacter(mary, neutralFace);
+	  addL(mary, "You mean those miniature models of boats you assemble from little parts?");
+	  addL(nathan, "Yes.");
+	  changeShowCharacter(mary, neutralFace2);
+	  addL(mary, "Do they sell those at the grocery store?");
+	  addL(nathan, "I don't think so.");
+	  changeShowCharacter(mary, happyFace);
+	  addL(mary, "That reminds me, have you heard of the new store that opened recently?");
+	  addL(nathan, "New store?");
+	  addL(mary, "Yes, I heard they sell all kinds of weird stuff there. They probably have plastic models too.");
+	  addL(nathan, "Have you been there yet?");
+	  changeShowCharacter(mary, happyFace2);
+	  addL(mary, "No, but I will soon!");
+	  changeShowCharacter(mary, happyFace3);
+	  addL(mary, "Let's-a-go-go!");
+	  
+	  changeBackground(bgStore, 2);
+	  changeShowCharacter(mary, happyFace, pX + defpw/10, pY, defpw, defph, 0, 1, 1);
+	  changeShowCharacter(protag, angryFace);
+	  addL(nathan, "That's the sketchiest store I've ever seen.");
+	  changeShowCharacter(mary, neutralFace);
+	  addL(mary, "Really? It looks pretty normal to me.");
+	  changeShowCharacter(protag, neutralFace);
+	  addL(nathan, "Are you sure they sell plastic model kits here?");
+	  changeShowCharacter(mary, sadFace);
+	  addL(mary, "Honestly, I don't know.");
+	  addL(nathan, "...Let's go in.");
+
+	  changeBackground(bgStoreInside, 1);
+	  changeShowCharacter(mary, neutralFace, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0, 1, 1);
+	  addL(clerk, "Konnichiwelcome!");
+	  changeShowCharacter(protag, angryFace);
+	  addL(nathan, ".........");
+	  changeShowCharacter(mary, happyFace2);
+	  addL(mary, "Good afternoon! Would you happen to sell any plastic model kits?");
+	  addL(clerk, "Yes!");
+	  changeShowCharacter(mary, happyFace3);
+	  addL(mary, "Great! Can we see them?");
+	  addL(clerk, "No!");
+	  changeShowCharacter(mary, sadFace);
+	  addL(mary, "...");
+	  addL(clerk, "I no understand English!");
+	  changeShowCharacter(mary, neutralFace);
+	  addL(mary, "What language do you speak?");
+	  addL(clerk, "I no understand English!");
+	  changeShowCharacter(mary, sadFace);
+	  addL(mary, "What do we do?");
+	  addChoice(2, "Speak Spanish", "Use sign language");
+	  break;
+	case scene0_1_2_1:
+	  changeShowCharacter(mary, neutralFace, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0, 1);
+	  changeShowCharacter(protag);
+	  addL(nathan, "Entendes galego?");
+	  addL(clerk, "O! Ho mal di stomaco!");
+	  changeShowCharacter(protag, angryFace);
+	  addL(nathan, "Estúpido! Non é bo lamentarse en compañía de mulleres!");
+	  addL(clerk, "Non è moglie!");
+	  addL(nathan, "!");
+	  addL(clerk, "Sciocco!");
+	  changeShowCharacter(protag, angryFace2);
+	  addL(nathan, "Que dices!");
+	  addL(clerk, "Ho bisogno di lassativos!");
+	  changeShowCharacter(mary, sadFace);
+	  addL(mary, "I can't understand anything.");
+	  addL(nathan, "Infeliz, teño vinte años de experiencia en esquí!");
+	  addL(clerk, "Canaglia!");
+	  addL(nathan, "Te farei comer patacas!");
+	  addL(clerk, "Prende questo!");
+	  changeShowCharacter(protag, angryFace);
+	  addL(nathan, "Ai!");
+	  changeShowCharacter(mary, surpriseFace);
+	  addL(mary, "Wait, why are you fighting?!");
+	  changeShowCharacter(protag, angryFace2);
+	  addL(nathan, "Ha!");
+	  addL(clerk, "Tropo lento!");
+	  changeShowCharacter(protag, angryFace);
+	  addL(nathan, "Ui! Doe!");
+	  addL(clerk, "Ha! Ha! Ha!");
+	  changeShowCharacter(protag, angryFace2);
+	  addL(nathan, "É forte de máis! Resta-me unha opción!");
+	  addL(nathan, "Genki Dama!");
+	  addL(mary, "Stop! We're indoors!");
+	  break;
+	case scene0_1_2_2:
+	  changeShowCharacter(mary, neutralFace, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0, 1);
+	  changeShowCharacter(protag);
+	  addL(nathan, "It's all right. I know sign language.");
+	  addL(mary, "Isn't that the language deaf people speak?");
+	  addL(nathan, "[Good afternoon.]", false);
+	  addL(clerk, "[Konnichiwelcome!]", false);
+	  addL(nathan, "[Do you sell plastic model kits?]", false);
+	  changeShowCharacter(mary, neutralFace2);
+	  addL(clerk, "[I cannot understand that sign.]", false);
+	  addL(nathan, "[I'll spell it.]", false);
+	  addL(nathan, "[P]", false);
+	  addL(nathan, "[L]", false);
+	  changeShowCharacter(mary, neutralFace);
+	  addL(nathan, "[A]", false);
+	  addL(nathan, "[S]", false);
+	  changeShowCharacter(mary, neutralFace2, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0, 1, 4);
+	  changeShowCharacter(mary, neutralFace2, (camera.w-defpw*0.75)/2 - defpw/7, (camera.h-defph*0.75)/2 + defph*0.75/5, defpw*0.75, defph*0.75, 0, 1, 3);
+	  addL(clerk, "[Just kidding, I got it the first time.]", false);
+	  addL(nathan, "[What kind of models do you have?]", false);
+	  addL(clerk, "[Frog]", false);
+	  changeShowCharacter(mary, neutralFace);
+	  addL(nathan, "[Sorry, I think misunderstood you.]", false);
+	  changeShowCharacter(mary, neutralFace2);
+	  addL(clerk, "[Frog]", false);
+	  addL(nathan, "[What is the name of the first president of the United States?]", false);
+	  doAnim(mary, 1);
+	  addL(clerk, "[Frog]", false);
+	  addL(nathan, "[What is the name of the planet closest to Earth?]", false);
+	  addL(clerk, "[Frog]", false);
+	  //doAnim(mary, 1);
+	  addL(nathan, "[What is the name of an insectivorous amphibian?]", false);
+	  //changeShowCharacter(mary, happyFace2);
+	  addL(clerk, "[Frog]", false);
+	  changeShowCharacter(protag, angryFace);
+	  changeShowCharacter(mary, happyFace2);
+	  addL(nathan, ".........");
+	  changeShowCharacter(mary, happyFace2, (camera.w-defpw*0.75)/2 - defpw/7, (camera.h-defph*0.75)/2 + defph*0.75/5, defpw*0.75, defph*0.75, 0, 1, 4);
+	  changeShowCharacter(mary, happyFace3, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0, 1, 3);
+	  addL(mary, "Look what I found! Isn't this plastic model of a frog cute?");
+	  changeShowCharacter(protag, angryFace2);
+	  addL(nathan, "What?!");
+	  break;
 	case scene0_1_1_1:
 	  changeShowCharacter(protag);
 	  changeShowCharacter(mary, happyFace, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0);
@@ -158,12 +290,15 @@ void Cutscene::indexScript() {
 	  addL(clerk, "Will you pay with cash or credit card?");
 	  changeShowCharacter(mary, happyFace2);
 	  addL(mary, "I'm paying with cash. Just a second.");
+	  doAnim(mary, 2);
 	  addL(none, "*fumble* *fumble*");
 	  changeShowCharacter(mary, neutralFace);
 	  addL(mary, "Huh?");
+	  doAnim(mary, 2);
 	  addL(none, "*fumble* *fumble* *fumble*");
 	  changeShowCharacter(mary, surpriseFace);
 	  addL(mary, "Huh? Where is it?");
+	  doAnim(mary, 2);
 	  addL(none, "*fumble* *fumble*\n*fumble* *fumble*");
 	  addL(clerk, "...");
 	  addL(mary, "A-ha-ha... Seems I forgot my wallet at home...");
@@ -233,7 +368,7 @@ void Cutscene::indexScript() {
 	  changeShowCharacter(mary, neutralFace, pX, pY, defpw, defph, 0, 1);
 	  addL(nathan, "All right. I want you to...");
 	  addL(nathan, ".........");
-	  addL(nathan, "...I want you to go by \'Saucy Mol\' for a week.");
+	  addL(nathan, "I want you to go by \'Saucy Mol\' for a week.");
 	  changeShowCharacter(mary, neutralFace);
 	  addL(mary, "What's \'Mol?\'");
 	  addL(nathan,  "It's short for \'Mary.\'");
@@ -293,6 +428,27 @@ void Cutscene::indexScript() {
 	  changeShowCharacter(mary, happyFace);
 	  addL(mary, "I'll give you a hint: you can't\nguess it.");
 	  addChoice(2, "It's a kiss", "It's a tuna sandwich");
+	  break;
+	case scene0_1_1_1_2:
+	  changeShowCharacter(protag);
+	  changeShowCharacter(mary, sadFace, (camera.w-defpw*1.25)/2, (camera.h-defph*1.25)/2 + defph*1.25/5, defpw*1.25, defph*1.25, 0);
+	  addL(nathan, ".........");
+	  changeShowCharacter(mary, happyFace2);
+	  addL(mary, "I said, 'seems I forgot my wallet at home!'");
+	  addL(none, "*glance*");
+	  addL(nathan, ".........");
+	  addL(mary, ".........");
+	  addL(mary, "...Jonathan?");
+	  addL(nathan, "Who are you?");
+	  changeShowCharacter(mary, surpriseFace);
+	  addL(mary, "What? It's Mary! Don't tell me you forgot again!");
+	  changeShowCharacter(protag, angryFace2);
+	  addL(nathan, "I do not know anyone by the name of Mary! I have never met this woman in my life!");
+	  addL(mary, "Jonathan!");
+	  addL(nathan, "My name is not Jonathan, and it wasn't me who installed Rensenware on the library computers!");
+	  addL(nathan, "Goodbye!");
+	  changeShowCharacter(mary, mairiFace);
+	  addL(mary, "Wait, Jonathan? Where are you going? Wait!");
 	  break;
 	case scene0_1_1_1_1_1:
 	  changeShowCharacter(mary, surpriseFace3, pX, pY, defpw, defph, 0);
@@ -389,6 +545,9 @@ void Cutscene::determineScene(sceneIDEnum sId, int selButton) {
     case scene0_1_1_1_1:
       sceneID = scene0_1_1_1_1_1;
       break;
+    case scene0_1_2:
+      sceneID = scene0_1_2_1;
+      break;
       
     case scene0_1_1_2:
       sceneID = scene0_1_1_2_1;
@@ -414,6 +573,9 @@ void Cutscene::determineScene(sceneIDEnum sId, int selButton) {
       break;
     case scene0_1_1_1_1:
       sceneID = scene0_1_1_1_1_2;
+      break;
+    case scene0_1_2:
+      sceneID = scene0_1_2_2;
       break;
     }
     break;

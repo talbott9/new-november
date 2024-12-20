@@ -1,7 +1,7 @@
 TTF_Font *gFont, *gFontOutline;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
-LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet2BG, gLivingRoomBG, gGroceryBG;
+LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet2BG, gLivingRoomBG, gGroceryBG, gStoreBG, gStoreInsideBG;
 LTexture gLSPortrait, gHGPortrait;
 LTexture gCharFace[2][20];
 
@@ -33,6 +33,8 @@ bool loadMedia() {
   gStreet1BG.loadFromFile("resources/bg/street1.png");
   gStreet2BG.loadFromFile("resources/bg/street2.png");
   gGroceryBG.loadFromFile("resources/bg/grocery.png");
+  gStoreBG.loadFromFile("resources/bg/store.png");
+  gStoreInsideBG.loadFromFile("resources/bg/storeinside.png");
   if(!gLSPortrait.loadFromFile("resources/chars/nathan/nathanportrait.png"))
     success = false;
   if(!gHGPortrait.loadFromFile("resources/chars/mary/maryportrait.png"))
