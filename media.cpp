@@ -1,7 +1,7 @@
 TTF_Font *gFont, *gFontOutline;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
-LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet2BG, gLivingRoomBG, gGroceryBG, gStoreBG, gStoreInsideBG;
+LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet1EveningBG, gStreet2BG, gLivingRoomBG, gGroceryBG, gStoreBG, gStoreInsideBG;
 LTexture gLSPortrait, gHGPortrait;
 LTexture gCharFace[2][20];
 
@@ -31,6 +31,7 @@ bool loadMedia() {
   gMenuBG.loadFromFile("resources/bg/menu.png");
   gLivingRoomBG.loadFromFile("resources/bg/livingroom.png");
   gStreet1BG.loadFromFile("resources/bg/street1.png");
+  gStreet1EveningBG.loadFromFile("resources/bg/street1evening.png");
   gStreet2BG.loadFromFile("resources/bg/street2.png");
   gGroceryBG.loadFromFile("resources/bg/grocery.png");
   gStoreBG.loadFromFile("resources/bg/store.png");

@@ -7,6 +7,7 @@
 #include "menu.h"
 #include "menu.cpp"
 #include "cutscene.h"
+#include "scriptseach.cpp"
 #include "scripts.cpp"
 #include "cutscene.cpp"
 

@@ -14,6 +14,7 @@ SDL_Joystick* gJoystick = NULL;
 const int JOYSTICK_DEAD_ZONE = 8000;
 int SCREEN_WIDTH = 800;
 int SCREEN_HEIGHT = 600;
+SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 SDL_Renderer* gRenderer = NULL;
 
 bool init()

@@ -19,6 +19,7 @@ public:
   bool isProtag;
   bool disappear[NUM_SCRIPT_LINES];
   bool appear[NUM_SCRIPT_LINES];
+  bool appear2[NUM_SCRIPT_LINES];
   int animationID[NUM_SCRIPT_LINES];
   float animTicks;
   int animCycle;
@@ -29,6 +30,7 @@ class Cutscene {
   Cutscene();
   void render(SDL_Rect& camera);
   void handleEvent(SDL_Event& e, std::string s);
+  void nathanMaryScript(), maryNathanScript();
   void indexScript();
   void handleEvent(SDL_Event& e, bool controller);
   void drawDialogueText(std::string s);

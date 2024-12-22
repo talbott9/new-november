@@ -1,4 +1,3 @@
-SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 SDL_Color White = {255, 255, 255};
 SDL_Color Grey = {75, 75, 75};
 SDL_Color Blue1 = {0, 105, 255};

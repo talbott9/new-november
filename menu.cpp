@@ -34,18 +34,18 @@ void Menu::renderMenu() {
 
     switch(playerChar) {
     case playerLS:
-      names[0] = "Louis";
+      names[0] = "Nathan";
       break;
     case playerHG:
-      names[0] = "Hildegarde";
+      names[0] = "Mary";
       break;
     }
      switch(friendChar) {
     case friendLS:
-      names[1] = "Louis";
+      names[1] = "Nathan";
       break;
     case friendHG:
-      names[1] = "Hildegarde";
+      names[1] = "Mary";
       break;
     }
     

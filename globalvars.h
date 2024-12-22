@@ -9,7 +9,17 @@
 #define PI 3.14159265
 
 const int defpw = 2480/2.5;
-const int defph = 3508/2.5; 
+const int defph = 3508/2.5;
+const int pX =  (camera.w-defpw)/2;
+const int pY = (camera.h-defph)/2 + defph/4.5;
+int cPX(float num = 1);
+int cPX(float num) {
+  return (camera.w-defpw*num)/2;
+}
+int cPY(float num = 1);
+int cPY(float num) {
+  return (camera.h-defph*num)/2 + defph*num/4.5;
+}
 
 const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 
@@ -19,10 +29,10 @@ float calcFPS;
 enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, happyFace, happyFace2, happyFace3, sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3};
 
 enum playerChars {playerLS, playerHG};
-playerChars playerChar = playerLS;
+playerChars playerChar = playerHG;
 enum friendChars {friendLS, friendHG};
-friendChars friendChar = friendHG;
-enum bgIDEnum {bgStreet1, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
+friendChars friendChar = friendLS;
+enum bgIDEnum {bgStreet1, bgStreet1Evening, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
 enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2, scene0_1_2_2, scene0_1_2_1};
 sceneIDEnum sceneID = 	scene0;
 enum charIDEnum {clerk = -4, protag = -3, none = -2, mom = -1, nathan, mary};

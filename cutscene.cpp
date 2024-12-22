@@ -61,7 +61,16 @@ Portrait::Portrait(bool changeM, bool mov, int x, int y, int textureID) {
 void Portrait::render() {
   // SDL_Rect clip = {0, 0, 500, 500};
   if(!isProtag) {
-    if(cutscene.bgAlpha < 255 || disappear[cutscene.lineNumber]) {
+    if(!disappear[cutscene.lineNumber] && cutscene.bgAlpha == 255 && (cutscene.bgWaitTicks > cutscene.bgWaitTime[cutscene.lineNumber]*60 || appear2[cutscene.lineNumber])) {
+      if(alpha < 255) {
+	//if(appear[cutscene.lineNumber])
+	alpha += 7;
+	//alpha += 10;
+	if(alpha > 255)
+	  alpha = 255;
+      }
+    } 
+    else if(cutscene.bgAlpha < 255 || disappear[cutscene.lineNumber]) {
       if(alpha > 0) {
 	if(disappear[cutscene.lineNumber])
 	  alpha -= 7;
@@ -71,12 +80,6 @@ void Portrait::render() {
 	  alpha = 0;
 	}
       }
-    } else if(cutscene.bgWaitTicks > cutscene.bgWaitTime[cutscene.lineNumber]*60) {
-      if(alpha < 255) {
-	alpha += 10;
-	if(alpha > 255)
-	  alpha = 255;
-      }
     }
     gTexture.setAlpha(alpha);
     gFace[face[cutscene.lineNumber]].setAlpha(alpha);
@@ -84,39 +87,41 @@ void Portrait::render() {
     gTexture.mHeight = size[1][cutscene.lineNumber];
     gFace[face[cutscene.lineNumber]].mWidth = size[0][cutscene.lineNumber];
     gFace[face[cutscene.lineNumber]].mHeight = size[1][cutscene.lineNumber];
-    switch(animationID[cutscene.lineNumber]) {
-    case 0:
-      mBox.x = xy[0][cutscene.lineNumber];
-      mBox.y = xy[1][cutscene.lineNumber];
-      break;
-    case 1:
-      mBox.x = xy[0][cutscene.lineNumber] + size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
-      mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
-      animTicks += 5;
-      if(animTicks > 180) {
-	animCycle++;
-	animTicks = 0;
-	if(animCycle > 1) {
-	  animCycle = 0;
-	  animationID[cutscene.lineNumber] = 0;
-	}
-      }
-      break;
-    case 2:
-      mBox.x = xy[0][cutscene.lineNumber] /*+ size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180)*/;
-      mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.002*sin(animTicks*PI/180);
-      animTicks += 10;
-      if(animTicks > 180) {
-	animCycle++;
-	animTicks = 0;
-	if(animCycle > 1) {
-	  animCycle = 0;
-	  animationID[cutscene.lineNumber] = 0;
-	}
-      }
-      break;
-    }
   }
+
+  switch(animationID[cutscene.lineNumber]) {
+  case 0:
+    mBox.x = xy[0][cutscene.lineNumber];
+    mBox.y = xy[1][cutscene.lineNumber];
+    break;
+  case 1:
+    mBox.x = xy[0][cutscene.lineNumber] + size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
+    mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
+    animTicks += 5;
+    if(animTicks > 180) {
+      animCycle++;
+      animTicks = 0;
+      if(animCycle > 1) {
+	animCycle = 0;
+	animationID[cutscene.lineNumber] = 0;
+      }
+    }
+    break;
+  case 2:
+    mBox.x = xy[0][cutscene.lineNumber] /*+ size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180)*/;
+    mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.002*sin(animTicks*PI/180);
+    animTicks += 10;
+    if(animTicks > 180) {
+      animCycle++;
+      animTicks = 0;
+      if(animCycle > 1) {
+	animCycle = 0;
+	animationID[cutscene.lineNumber] = 0;
+      }
+    }
+    break;
+  }
+  
   gTexture.render(mBox.x, mBox.y);
   gFace[face[cutscene.lineNumber]].render(mBox.x, mBox.y);
 }
@@ -178,7 +183,8 @@ void Cutscene::addChoice(int number, std::string c1, std::string c2, std::string
   numChoiceBoxes[scriptLine.size()-1] = number;
 }
 
-//type 3 - fade in, type 4 - fade out, type 2 - fade out with pause
+//type 3 - fade in, type 5 - fade in w/ pause
+//type 4 - fade out, type 2 - fade out with pause
 void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int x, int y, int w, int h, int textureNumber, bool shew, int type) {
   if(characterID == protag) {
     protagPortrait->alpha = 255;
@@ -190,12 +196,37 @@ void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int
       while(protagPortrait->show.size() < NUM_SCRIPT_LINES)
 	protagPortrait->show.push_back(shew);
     }
+
+    protagPortrait->xy[0].resize(scriptLine.size());
+    while(protagPortrait->xy[0].size() < NUM_SCRIPT_LINES)
+      protagPortrait->xy[0].push_back(protagPortrait->mBox.x);
+    
+    protagPortrait->xy[1].resize(scriptLine.size());
+    while(protagPortrait->xy[1].size() < NUM_SCRIPT_LINES)
+      protagPortrait->xy[1].push_back(protagPortrait->mBox.y);
+
+    protagPortrait->size[0].resize(scriptLine.size());
+    while(protagPortrait->size[0].size() < NUM_SCRIPT_LINES)
+      protagPortrait->size[0].push_back(protagPortrait->gTexture.mWidth);
+
+    protagPortrait->size[1].resize(scriptLine.size());
+    while(protagPortrait->size[1].size() < NUM_SCRIPT_LINES)
+      protagPortrait->size[1].push_back(protagPortrait->gTexture.mHeight);
+    
+    
   } else {
-    if(!charPortrait[characterID]->show[lineNumber] && type == 1) {
-      charPortrait[characterID]->alpha = 0;
+    if(type == 5) {
+      bgWaitTime.resize(scriptLine.size());
+      bgWaitTime.push_back(1);
+      addL(none, "");
+      // charPortrait[characterID]->alpha = 0;
+      charPortrait[characterID]->appear[scriptLine.size()-1] = true;
+      charPortrait[characterID]->appear2[scriptLine.size()-1] = true;
     }
-    if(type == 3) 
+    else if(type == 3) {
+      //charPortrait[characterID]->alpha = 0;
       charPortrait[characterID]->appear[scriptLine.size()] = true;
+    }
     else if(type == 2) {
       bgWaitTime.resize(scriptLine.size());
       bgWaitTime.push_back(1);
@@ -243,7 +274,10 @@ void Cutscene::changeShowCharacter(charIDEnum characterID, portraitFace fac, int
   changeShowChar.push_back(true);
 }
 void Cutscene::doAnim(charIDEnum characterID, int animID) {
-  charPortrait[characterID]->animationID[scriptLine.size()] = animID;
+  if(characterID == protag)
+    protagPortrait->animationID[scriptLine.size()] = animID;
+  else
+    charPortrait[characterID]->animationID[scriptLine.size()] = animID;
 }
 
 void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
@@ -333,6 +367,7 @@ void Cutscene::skipText() {
       charCount = 0;
       gText.free();
       textWritten = "";
+      protagPortrait->reset();
       for(int i = 0; i < NUM_CHARS; i++) {
 	charPortrait[i]->reset();
 	if(charPortrait[i]->disappear[lineNumber]) {
@@ -416,6 +451,7 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 	    charCount = 0;
 	    gText.free();
 	    textWritten = "";
+	    protagPortrait->reset();
 	    for(int i = 0; i < NUM_CHARS; i++) {
 	      charPortrait[i]->reset();
 	      if(charPortrait[i]->disappear[lineNumber]) {
@@ -526,6 +562,9 @@ void Cutscene::play() {
     case bgStreet1:
       gBackground = gStreet1BG;
       break;
+    case bgStreet1Evening:
+      gBackground = gStreet1EveningBG;
+      break;
     case bgStreet2:
       gBackground = gStreet2BG;
       break;
@@ -583,11 +622,12 @@ void Cutscene::play() {
 	  charPortrait[i]->show.push_back(false);
       }
     }
-    else if(charPortrait[i]->appear[lineNumber]) {
+    if(charPortrait[i]->appear[lineNumber]) {
       charPortrait[i]->show.clear();
       while(charPortrait[i]->show.size() < NUM_SCRIPT_LINES)
 	charPortrait[i]->show.push_back(true);
-      charPortrait[i]->alpha = 0;
+      if(!charPortrait[i]->disappear[lineNumber])
+	charPortrait[i]->alpha = 0;
       charPortrait[i]->appear[lineNumber] = false;
     }
 	
