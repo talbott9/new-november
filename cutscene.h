@@ -44,6 +44,7 @@ class Cutscene {
   void changeBackground(bgIDEnum id, int wait = 0);
   void changeShowCharacter(charIDEnum characterID, portraitFace fac = neutralFace, int x = -1, int y = -1, int w = -1, int h = -1, int textureNumber = -1, bool show = true, int type = -1);
   void doAnim(charIDEnum characterID, int animID);
+  void doWait(int wait);
   void choiceBoxAnim();
   void determineScene(sceneIDEnum sId, int selButton);
   void determineTexture(charIDEnum characterID, int textureNumber);
@@ -56,6 +57,7 @@ class Cutscene {
   LTexture* gTextboxTexture = &gTextbox;
   TTF_Font** gTextFont;
   LTexture gText;
+  SDL_Color textColor;
 
   //Control character slide-on-screen animation
   bool createdPortrait[NUM_PORTRAITS];

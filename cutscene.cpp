@@ -5,6 +5,7 @@ Cutscene::Cutscene() {
   textX = textbox.x + textbox.w/4.5 - 15;
   textY = textbox.y + textbox.h/5;
   gTextFont = &gFont;
+  textColor = {255, 255, 255};
   for(int i = 0; i < NUM_PORTRAITS; i++) {
     charPortrait[i] = new Portrait(false, false, 0, 0, i);
   }
@@ -89,11 +90,9 @@ void Portrait::render() {
     gFace[face[cutscene.lineNumber]].mHeight = size[1][cutscene.lineNumber];
   }
 
+  mBox.x = xy[0][cutscene.lineNumber];
+  mBox.y = xy[1][cutscene.lineNumber];
   switch(animationID[cutscene.lineNumber]) {
-  case 0:
-    mBox.x = xy[0][cutscene.lineNumber];
-    mBox.y = xy[1][cutscene.lineNumber];
-    break;
   case 1:
     mBox.x = xy[0][cutscene.lineNumber] + size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
     mBox.y = xy[1][cutscene.lineNumber] + size[1][cutscene.lineNumber]*0.003*sin(animTicks*PI/180);
@@ -119,6 +118,24 @@ void Portrait::render() {
 	animationID[cutscene.lineNumber] = 0;
       }
     }
+    break;
+  case 3:
+    mBox.x = xy[0][cutscene.lineNumber] /*+ size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180)*/;
+    mBox.y = xy[1][cutscene.lineNumber] - size[1][cutscene.lineNumber]*0.008*sin(animTicks*PI/180);
+    animTicks += 30;
+    if(animTicks > 180) {
+      animCycle++;
+      animTicks = 0;
+      if(animCycle > 0) {
+	animCycle = 0;
+	animationID[cutscene.lineNumber] = 0;
+      }
+    }
+    break;
+    //shiver
+  case 4:
+    mBox.x = xy[0][cutscene.lineNumber] + size[0][cutscene.lineNumber]*0.0005*sin(animTicks*PI/180);
+    animTicks += 90;
     break;
   }
   
@@ -162,6 +179,12 @@ void Cutscene::addL(charIDEnum characterID, std::string s, bool addQuotes) {
     break;
   case mary:
     name = "Mary";
+    break;
+  case catie:
+    name = "Catie";
+    break;
+  case unknown:
+    name = "???";
     break;
   }
   charName.push_back(name);
@@ -290,6 +313,9 @@ void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
     case mary:
       charPortrait[characterID]->gTexture = gHGPortrait;
       break;
+    case catie:
+      charPortrait[characterID]->gTexture = gCatiePortrait;
+      break;
     }
     break;
   }
@@ -307,6 +333,13 @@ void Cutscene::changeBackground(bgIDEnum id, int wait) {
   bgWaitTime.push_back(wait);
   if(wait != 0)
     addL(none, "");
+}
+
+void Cutscene::doWait(int wait) {
+  int size = scriptLine.size();
+  bgWaitTime.resize(size);
+  bgWaitTime.push_back(wait);
+  addL(none, "");
 }
 
 

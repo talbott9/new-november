@@ -2,8 +2,8 @@ TTF_Font *gFont, *gFontOutline;
 TTF_Font* gFancyFont = NULL;
 TTF_Font* gBigFancyFont = NULL;
 LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet1EveningBG, gStreet2BG, gLivingRoomBG, gGroceryBG, gStoreBG, gStoreInsideBG;
-LTexture gLSPortrait, gHGPortrait;
-LTexture gCharFace[2][20];
+LTexture gLSPortrait, gHGPortrait, gCatiePortrait;
+LTexture gCharFace[NUM_CHARS][20];
 
 bool loadMedia() {
   bool success = true;
@@ -11,6 +11,7 @@ bool loadMedia() {
   std::string nameStr[NUM_CHARS];
   nameStr[nathan] = "nathan";
   nameStr[mary] = "mary";
+  nameStr[catie] = "catie";
   
   faceDir[neutralFace] = "faceneutral.png";
   faceDir[neutralFace2] = "faceneutral2.png";
@@ -39,6 +40,8 @@ bool loadMedia() {
   if(!gLSPortrait.loadFromFile("resources/chars/nathan/nathanportrait.png"))
     success = false;
   if(!gHGPortrait.loadFromFile("resources/chars/mary/maryportrait.png"))
+    success = false;
+  if(!gCatiePortrait.loadFromFile("resources/chars/catie/catieportrait.png"))
     success = false;
 
   for(int i = 0; i < NUM_CHARS; i++) {
