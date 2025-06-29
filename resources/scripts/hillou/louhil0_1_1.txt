@@ -1,0 +1,33 @@
+//Isaac
+Isaac Newton?
+..........
+Or was he the guy who wrote 'Crime and Punishment?' I always get them mixed up.
+.........
+Okay, maybe my grades are slightly below average.
+Shouldn't you be heading to the grocery store?
+What?! How did you know?!
+I heard you singing it. The grocery song.
+Geez, you heard that? That's embarrassing.
+And you? Where are you going?
+...To the grocery store.
+What a coincidence! Let's go together, then!
+I'd rather not...
+Why?
+Well...
+.........
+Fine, I'll go.
+Yay!
+Don't make a fuss about it.
+//grocery
+Chicken... Beef... Bacon...
+Oh, there it is! My favorite! Soy sauce-flavored ramen!
+......
+I don't remember the last time I bought the other flavors. Soy sauce is just better.
+For example, chicken ramen doesn't taste like chicken at all. I don't know why they named it that.
+......
+Bacon gets close to tasting like bacon, but not quite. I don't like it. I think they call that the "uncanny valley."
+Beef is fine, I suppose. It's kind of neutral. But it doesn't taste like beef, either.
+......
+Are you going to buy eggs or ramen? Choose one.
+--Eggs
+--Ramen
