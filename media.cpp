@@ -17,6 +17,7 @@ bool loadMedia() {
   faceDir[neutralFace2] = "faceneutral2.png";
   faceDir[angryFace] = "faceangry.png";
   faceDir[angryFace2] = "faceangry2.png";
+  faceDir[angryFace3] = "faceangry3.png";
   faceDir[sadFace] = "facesad.png";
   faceDir[happyFace] = "facehappy.png";
   faceDir[happyFace2] = "facehappy2.png";

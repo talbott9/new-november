@@ -119,6 +119,7 @@ void Portrait::render() {
       }
     }
     break;
+	//jump
   case 3:
     mBox.x = xy[0][cutscene.lineNumber] /*+ size[0][cutscene.lineNumber]*0.003*sin(animTicks*PI/180)*/;
     mBox.y = xy[1][cutscene.lineNumber] - size[1][cutscene.lineNumber]*0.008*sin(animTicks*PI/180);

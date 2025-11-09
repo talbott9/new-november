@@ -47,6 +47,9 @@ void Menu::renderMenu() {
     case friendHG:
       names[1] = "Mary";
       break;
+	case friendCAT:
+      names[1] = "Cat";
+      break;
     }
     
     gText.loadFromRenderedText(names[0], Black, 0, gFancyFont);
@@ -104,7 +107,9 @@ void Menu::handleEvent(SDL_Event& e) {
 	    switch(friendChar) {
 	    case friendLS: friendChar = friendHG;
 	      break;
-	    case friendHG: friendChar = friendLS;
+	    case friendHG: friendChar = friendCAT;
+	      break;
+		case friendCAT: friendChar = friendLS;
 	      break;
 	    }
 	  } else if(checkCollision(mouseBox,boxes[0])) {

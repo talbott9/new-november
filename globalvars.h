@@ -26,12 +26,13 @@ const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 Uint32 frame_time;
 float calcFPS;
 
-enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, happyFace, happyFace2, happyFace3, sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3};
+enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, angryFace3, happyFace, happyFace2, happyFace3, 
+sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3};
 
 enum playerChars {playerLS, playerHG};
 playerChars playerChar = playerHG;
-enum friendChars {friendLS, friendHG};
-friendChars friendChar = friendLS;
+enum friendChars {friendLS, friendHG, friendCAT};
+friendChars friendChar = friendCAT;
 enum bgIDEnum {bgStreet1, bgStreet1Evening, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
 enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2, scene0_1_2_2, scene0_1_2_1};
 sceneIDEnum sceneID = 	scene0;

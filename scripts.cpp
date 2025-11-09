@@ -70,6 +70,9 @@ void Cutscene::indexScript() {
       case friendLS:
 	maryNathanScript();
 	break;
+	case friendCAT:
+	maryCatieScript();
+	break;
       }
       
       break;
