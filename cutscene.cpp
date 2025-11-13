@@ -187,6 +187,17 @@ void Cutscene::addL(charIDEnum characterID, std::string s, bool addQuotes) {
   case unknown:
     name = "???";
     break;
+  case link:
+    name = "Link";
+    break;
+  case hal:
+    name = "Hal";
+    break;
+  case all:
+	name = "All";
+  case marycatie:
+	name = "M. & C.";
+	break;
   }
   charName.push_back(name);
   std::string msg = "";
@@ -316,6 +327,12 @@ void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
       break;
     case catie:
       charPortrait[characterID]->gTexture = gCatiePortrait;
+      break;
+	case link:
+      charPortrait[characterID]->gTexture = gLinkPortrait;
+      break;
+	case hal:
+      charPortrait[characterID]->gTexture = gHalPortrait;
       break;
     }
     break;
