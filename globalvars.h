@@ -35,7 +35,7 @@ enum friendChars {friendLS, friendHG, friendCAT};
 friendChars friendChar = friendCAT;
 enum bgIDEnum {bgStreet1, bgStreet1Evening, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
 enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2, scene0_1_2_2, scene0_1_2_1};
-sceneIDEnum sceneID = 	scene0_1_1_1;
+sceneIDEnum sceneID = 	scene0_1_1;
 enum charIDEnum {marycatie = -7, all = -6, unknown = -5, clerk = -4, protag = -3, none = -2, mom = -1, nathan, mary, catie, hal, link};
 
 bool pressedKey[50];
