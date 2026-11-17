@@ -80,7 +80,7 @@ class Cutscene {
   bool mouseIsOnChoice;
   std::string s;
   char c;
-  int i, charCount, lineNumber, totalNumberOfLines, wrpBnd, textX, textY;
+  int i, charCount, lineNumber, totalNumberOfLines, wrpBnd, wrpBndG, textX, textY;
   bool doNotType, hasIndexedScript, hasDeterminedScenes, advancedDialogue, tobasu, hasTobasu, canAdvance;
 };
 

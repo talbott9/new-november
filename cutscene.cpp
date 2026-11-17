@@ -2,6 +2,7 @@ Cutscene::Cutscene() {
   bgSpeed = 5;
   textbox= {camera.x, camera.h - 128 - camera.h/12, 800, 128};
   wrpBnd = textbox.w - textbox.w/6*3.25;
+  wrpBndG = textbox.w - textbox.w/6*3.25 + textbox.w/400;
   textX = textbox.x + textbox.w/4.5 - 15;
   textY = textbox.y + textbox.h/5;
   gTextFont = &gFont;
@@ -365,14 +366,14 @@ void Cutscene::drawDialogueText(std::string s) {
   //drawTicks++;
   if(isChoice[lineNumber]) {
     for(int i = 0; i < numChoiceBoxes[lineNumber]; i++) {
-      gText.loadFromRenderedText(strChoices[i], Grey, wrpBnd, gFontOutline);
+      gText.loadFromRenderedText(strChoices[i], Grey, wrpBndG, gFontOutline);
       gText.render(textX+25, textY + (choiceBoxes[0].h)*i);
       gText.loadFromRenderedText(strChoices[i], White, wrpBnd, gFont);
       gText.render(textX+25, textY + (choiceBoxes[0].h)*i);
     }
   } else {
     if(charName[lineNumber] != "") {
-      gText.loadFromRenderedText(charName[lineNumber], Grey, wrpBnd, gFontOutline);
+      gText.loadFromRenderedText(charName[lineNumber], Grey, wrpBndG, gFontOutline);
       gText.render(textX-75, textY);
       gText.loadFromRenderedText(charName[lineNumber], White, wrpBnd, gFont);
       gText.render(textX-75, textY);
@@ -387,7 +388,7 @@ void Cutscene::drawDialogueText(std::string s) {
 	  }
 	}
       }
-      gText.loadFromRenderedText(textWritten, Grey, wrpBnd, gFontOutline);
+      gText.loadFromRenderedText(textWritten, Grey, wrpBndG, gFontOutline);
       gText.render(textX+25, textY);
       gText.loadFromRenderedText(textWritten, White, wrpBnd, gFont);
       gText.render(textX+25, textY);
@@ -402,7 +403,7 @@ void Cutscene::drawDialogueText(std::string s) {
 	  }
 	}
       }
-      gText.loadFromRenderedText(textWritten, Grey, wrpBnd, gFontOutline);
+      gText.loadFromRenderedText(textWritten, Grey, wrpBndG, gFontOutline);
       gText.render(textX+25, textY);
       gText.loadFromRenderedText(textWritten, White, wrpBnd, gFont);
       gText.render(textX+25, textY);
@@ -581,14 +582,15 @@ void Cutscene::handleEvent(SDL_Event& e, bool controller) {
 	    mouseIsOnChoice = true;
 	    selectedChoice = i;
 	    if(mouseLeft) {
-	      if(!pressedKey[mleft])
+	      if(!pressedKey[z])
 		chose = true;
-	      pressedKey[mleft] = true;
-	    } else {
-	      pressedKey[mleft] = false;
+	      pressedKey[z] = true;
+	    } else if(!zKey) {
+	      pressedKey[z] = false;
 	    }
 	  }
 	}
+	
 	if(chose && selectedChoice != -1) {
 	  canAdvance = true;
 	  determineScene(sceneID, selectedChoice);

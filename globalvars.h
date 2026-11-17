@@ -1,7 +1,7 @@
 #define fps 60
 #define NUM_CHARS 5
 #define NUM_PORTRAITS 10
-#define NUM_FACES 15
+#define NUM_FACES 16
 #define NUM_SCRIPT_LINES 200
 #define BIG_NUMBER 999999
 #define PORTRAIT_WIDTH 2480
@@ -27,7 +27,7 @@ Uint32 frame_time;
 float calcFPS;
 
 enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, angryFace3, happyFace, happyFace2, happyFace3, 
-sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3, blushFace, blushFace2};
+sadFace, mairiFace, mairiFace2, surpriseFace, surpriseFace2, surpriseFace3, blushFace, blushFace2};
 
 enum playerChars {playerLS, playerHG, playerCAT};
 playerChars playerChar = playerCAT;
