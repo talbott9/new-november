@@ -30,7 +30,7 @@ class Cutscene {
   Cutscene();
   void render(SDL_Rect& camera);
   void handleEvent(SDL_Event& e, std::string s);
-  void nathanMaryScript(), maryNathanScript(), maryCatieScript();
+  void nathanMaryScript(), maryNathanScript(), maryCatieScript(), catieMaryScript(), catieNathanScript(), nathanCatieScript();
   void indexScript();
   void handleEvent(SDL_Event& e, bool controller);
   void drawDialogueText(std::string s);

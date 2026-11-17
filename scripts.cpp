@@ -76,6 +76,24 @@ void Cutscene::indexScript() {
       }
       
       break;
+	 case playerCAT:
+      
+      protagPortrait->gTexture = gCatiePortrait;
+      for(int i = 0; i < NUM_FACES; i++)
+	protagPortrait->gFace[i] = gCharFace[catie][i];
+     protagPortrait->mBox.x = cutscene.textbox.w*0.325;
+     protagPortrait->mBox.y = cutscene.textbox.y-cutscene.textbox.h*2;
+      
+      switch(friendChar) {
+      case friendLS:
+	//catNathanScript();
+	break;
+	case friendHG:
+	catieMaryScript();
+	break;
+      }
+      
+      break;
       
     }
     totalNumberOfLines = scriptLine.size();

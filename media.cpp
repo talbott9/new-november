@@ -28,6 +28,8 @@ bool loadMedia() {
   faceDir[surpriseFace] = "facesurprise.png";
   faceDir[surpriseFace2] = "facesurprise2.png";
   faceDir[surpriseFace3] = "facesurprise3.png";
+  faceDir[blushFace] = "faceblush.png";
+  faceDir[blushFace2] = "faceblush.png";
   
   if(!gTextbox.loadFromFile("resources/objects/textbox.png"))
     success = false;

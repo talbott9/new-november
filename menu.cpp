@@ -39,6 +39,9 @@ void Menu::renderMenu() {
     case playerHG:
       names[0] = "Mary";
       break;
+	case playerCAT:
+      names[0] = "Cat";
+      break;
     }
      switch(friendChar) {
     case friendLS:
@@ -100,7 +103,9 @@ void Menu::handleEvent(SDL_Event& e) {
 	    switch(playerChar) {
 	    case playerLS: playerChar = playerHG;
 	      break;
-	    case playerHG: playerChar = playerLS;
+	    case playerHG: playerChar = playerCAT;
+	      break;
+		case playerCAT: playerChar = playerLS;
 	      break;
 	    }
 	  } else if(checkCollision(mouseBox,boxes[3])) {

@@ -1,7 +1,7 @@
 #define fps 60
 #define NUM_CHARS 5
 #define NUM_PORTRAITS 10
-#define NUM_FACES 13
+#define NUM_FACES 15
 #define NUM_SCRIPT_LINES 200
 #define BIG_NUMBER 999999
 #define PORTRAIT_WIDTH 2480
@@ -27,12 +27,12 @@ Uint32 frame_time;
 float calcFPS;
 
 enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, angryFace3, happyFace, happyFace2, happyFace3, 
-sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3};
+sadFace, mairiFace, surpriseFace, surpriseFace2, surpriseFace3, blushFace, blushFace2};
 
-enum playerChars {playerLS, playerHG};
-playerChars playerChar = playerHG;
+enum playerChars {playerLS, playerHG, playerCAT};
+playerChars playerChar = playerCAT;
 enum friendChars {friendLS, friendHG, friendCAT};
-friendChars friendChar = friendCAT;
+friendChars friendChar = friendHG;
 enum bgIDEnum {bgStreet1, bgStreet1Evening, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};
 enum sceneIDEnum {scene0, scene0_1, scene0_1_1, scene0_1_1_1, scene0_1_1_1_1, scene0_1_1_1_1_1, scene0_1_1_1_1_2, scene0_1_1_1_2, scene0_1_1_2_1, scene0_1_1_2_2, scene0_1_2, scene0_1_1_2, scene0_2, scene0_1_2_2, scene0_1_2_1};
 sceneIDEnum sceneID = 	scene0;
