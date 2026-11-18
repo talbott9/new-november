@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <cmath>
 #include <vector>
+#include <filesystem>
 
 SDL_Window* gWindow = NULL;
 SDL_GameController* gGameController = NULL;

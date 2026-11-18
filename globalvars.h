@@ -30,7 +30,7 @@ enum portraitFace {neutralFace, neutralFace2, angryFace, angryFace2, angryFace3,
 sadFace, mairiFace, mairiFace2, surpriseFace, surpriseFace2, surpriseFace3, blushFace, blushFace2};
 
 enum playerChars {playerLS, playerHG, playerCAT};
-playerChars playerChar = playerCAT;
+playerChars playerChar = playerLS;
 enum friendChars {friendLS, friendHG, friendCAT};
 friendChars friendChar = friendHG;
 enum bgIDEnum {bgStreet1, bgStreet1Evening, bgStreet2, bgLivingRoom, bgGrocery, bgStore, bgStoreInside};

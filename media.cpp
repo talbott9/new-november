@@ -5,8 +5,7 @@ LTexture gTextbox, gCoastBG, gMenuBG, gStreet1BG, gStreet1EveningBG, gStreet2BG,
 LTexture gLSPortrait, gHGPortrait, gCatiePortrait, gHalPortrait, gLinkPortrait;
 LTexture gCharFace[NUM_CHARS][NUM_FACES];
 
-bool loadMedia() {
-  bool success = true;
+void loadFaces() {
   std::string faceDir[NUM_FACES];
   std::string nameStr[NUM_CHARS];
   nameStr[nathan] = "nathan";
@@ -32,6 +31,17 @@ bool loadMedia() {
   faceDir[blushFace] = "faceblush.png";
   faceDir[blushFace2] = "faceblush2.png";
   
+  for(int i = 0; i < NUM_CHARS; i++) {
+    for(int j = 0; j < NUM_FACES; j++) {
+		if(std::filesystem::exists("resources/chars/" + nameStr[i] + "/" + nameStr[i] + faceDir[j]))
+		   gCharFace[i][j].loadFromFile("resources/chars/" + nameStr[i] + "/" + nameStr[i] + faceDir[j]);
+    }
+  }
+}
+
+bool loadMedia() {
+  bool success = true;
+  
   if(!gTextbox.loadFromFile("resources/objects/textbox.png"))
     success = false;
   gCoastBG.loadFromFile("resources/bg/coast.png");
@@ -54,11 +64,7 @@ bool loadMedia() {
   if(!gLinkPortrait.loadFromFile("resources/chars/link/linkportrait.png"))
     success = false;
 
-  for(int i = 0; i < NUM_CHARS; i++) {
-    for(int j = 0; j < NUM_FACES; j++) {
-      gCharFace[i][j].loadFromFile("resources/chars/" + nameStr[i] + "/" + nameStr[i] + faceDir[j]);
-    }
-  }
+  loadFaces();
   return success;
 }
 

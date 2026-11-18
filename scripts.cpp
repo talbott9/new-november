@@ -45,6 +45,7 @@ void Cutscene::indexScript() {
     case playerLS:
       
       protagPortrait->gTexture = gLSPortrait;
+	  protagPortrait->portraitID = nathan;
       for(int i = 0; i < NUM_FACES; i++)
 	protagPortrait->gFace[i] = gCharFace[nathan][i];
       protagPortrait->mBox.x = cutscene.textbox.w*0.3;
@@ -52,8 +53,8 @@ void Cutscene::indexScript() {
       
       switch(friendChar) {
       case friendHG:
-	nathanMaryScript();
-	break;
+		nathanMaryScript();
+		break;
       }
       
       break;
@@ -61,6 +62,7 @@ void Cutscene::indexScript() {
     case playerHG:
       
       protagPortrait->gTexture = gHGPortrait;
+	  protagPortrait->portraitID = mary;
       for(int i = 0; i < NUM_FACES; i++)
 	protagPortrait->gFace[i] = gCharFace[mary][i];
      protagPortrait->mBox.x = cutscene.textbox.w*0.325;
@@ -79,6 +81,7 @@ void Cutscene::indexScript() {
 	 case playerCAT:
       
       protagPortrait->gTexture = gCatiePortrait;
+	  protagPortrait->portraitID = catie;
       for(int i = 0; i < NUM_FACES; i++)
 	protagPortrait->gFace[i] = gCharFace[catie][i];
      protagPortrait->mBox.x = cutscene.textbox.w*0.325;

@@ -23,6 +23,7 @@ public:
   int animationID[NUM_SCRIPT_LINES];
   float animTicks;
   int animCycle;
+  charIDEnum portraitID;
 };
 
 class Cutscene {

@@ -142,7 +142,27 @@ void Portrait::render() {
   }
   
   gTexture.render(mBox.x, mBox.y);
-  gFace[face[cutscene.lineNumber]].render(mBox.x, mBox.y);
+  //resize the 500x500 face to fit 2408x3??? body
+  gFace[face[cutscene.lineNumber]].mWidth/=4.96;
+  gFace[face[cutscene.lineNumber]].mHeight/=7.016;
+  
+  int renderX, renderY;
+  switch(portraitID) {
+	  case nathan:
+	  renderX = mBox.x+(350*(gFace[face[cutscene.lineNumber]].mWidth/175));
+	  renderY = mBox.y+(135*(gFace[face[cutscene.lineNumber]].mHeight/175));
+	  break;
+	  case mary:
+	  renderX = mBox.x+(345*(gFace[face[cutscene.lineNumber]].mWidth/175));
+	  renderY = mBox.y+(212*(gFace[face[cutscene.lineNumber]].mHeight/175));
+	  break;
+	  case catie:
+	  renderX = mBox.x+(355*(gFace[face[cutscene.lineNumber]].mWidth/175));
+	  renderY = mBox.y+(227*(gFace[face[cutscene.lineNumber]].mHeight/175));
+	  break;
+  }
+  
+  gFace[face[cutscene.lineNumber]].render(renderX, renderY);
 }
 
 void Portrait::reset() {
@@ -340,6 +360,8 @@ void Cutscene::determineTexture(charIDEnum characterID, int textureNumber) {
   }
   for(int i = 0; i < NUM_FACES; i++)
     charPortrait[characterID]->gFace[i] = gCharFace[characterID][i];
+
+	charPortrait[characterID]->portraitID = characterID;
 }
 
 void Cutscene::changeBackground(bgIDEnum id, int wait) {
